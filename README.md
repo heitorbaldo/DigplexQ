@@ -1,4 +1,4 @@
-image:: logo_topodigraphlogo.png
+.. image:: logo_topodigraphlogo.png
    :width: 410px
 
 .. image:: https://colab.research.google.com/assets/colab-badge.svg
