@@ -250,7 +250,8 @@ def maslov_sneppen_rewiring(M):
     MS = nx.random_reference(Gr, niter=1, connectivity=True, seed=None)
     D = nx.DiGraph(MS)
     MSW = remove_double_edges_rand(D)
-    return MSW
+    MSW_matrix = nx.to_numpy_matrix(MSW)
+    return MSW_matrix
 
 
 def lattice_rewiring(M):
@@ -265,7 +266,8 @@ def lattice_rewiring(M):
     L = nx.lattice_reference(Gr, niter=5, D=None, connectivity=True, seed=None)
     D = nx.DiGraph(L)
     LW = remove_double_edges_rand(D)
-    return LW
+    LW_matrix = nx.to_numpy_matrix(LW)
+    return LW_matrix
 
 
 
