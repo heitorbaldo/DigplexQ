@@ -194,7 +194,7 @@ def out_q_forman_ricci_curvature_max(M):
     outFRC = []
     
     for v in range(n):
-        inFRC.append(out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'))
+        outFRC.append(out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'))
      
     Max_outFRC = max(outFRC)
     return Max_outFRC
