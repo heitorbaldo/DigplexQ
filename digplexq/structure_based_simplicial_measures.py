@@ -38,7 +38,9 @@ __all__ = [
     "communicability",
     "q_communicability",
     "q_returnability",
-    "structural_q_entropy",
+    "q_structural_entropy",
+    "in_q_degree_distribution_entropy",
+    "out_q_degree_distribution_entropy",
 ]
 
 
@@ -676,10 +678,112 @@ def q_returnability(A, normalized=True):
     else:
         return round(K, 5)
 
+    
 
 #----- Entropies -----
 
-def structural_q_entropy(Hq):
-    '''Returns
+def q_structural_entropy(Hq):
+    '''Returns the q-structural entropy of a digraph.
+    Parameters
+    ----------
+    Hq: q-adjacency matrix.
     '''
-    return Hq
+    if isinstance(Hq, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    G = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+
+    if nx.is_empty(G) == True:
+        return 0
+    
+    n = len(Hq)
+    sum_Q = 0
+    Hq = 0
+    sum_Qi = []
+    
+    for i in range(n):
+        Q_i = 0
+        for j in range(n):
+            Q_i += communicability(Hq, i, j)
+        sum_Qi.append(Q_i)
+    
+    for i in range(n):
+        for j in range(n):
+            sum_Q += communicability(Hq, i, j)
+    
+    for k in range(n):
+        H += (sum_Qi[k]/sum_Q)*math.log2(sum_Qi[k]/sum_Q)
+    
+    return round(-H, 5)
+
+
+def in_q_degree_distribution_entropy(Hq):
+    '''Returns the in-q-degree distribution entropy of a digraph.
+    Parameters
+    ----------
+    Hq: q-adjacency matrix.
+    '''
+    if isinstance(Hq, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gq) == True:
+        return 0
+    
+    D = []
+    H = 0
+    n = len(Hq)
+    
+    for k in range(n):
+        delta_k = 0
+        for i in range(n):
+            if Gq.in_degree(i) == k:
+                delta_k += 1
+            else:
+                pass
+        if delta_k != 0:
+            D.append(delta_k)
+        else:
+            pass
+    
+    for k in range(len(D)):
+        H += (D[k]/n)*math.log2(D[k]/n)
+    
+    return round(-H, 5)
+
+
+def out_q_degree_distribution_entropy(Hq):
+    '''Returns the out-q-degree distribution entropy of a digraph.
+    Parameters
+    ----------
+    Hq: q-adjacency matrix.
+    '''
+    if isinstance(Hq, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gq) == True:
+        return 0
+    
+    D = []
+    H = 0
+    n = len(Hq)
+    
+    for k in range(n):
+        delta_k = 0
+        for i in range(n):
+            if Gq.out_degree(i) == k:
+                delta_k += 1
+            else:
+                pass
+        if delta_k != 0:
+            D.append(delta_k)
+        else:
+            pass
+    
+    for k in range(len(D)):
+        H += (D[k]/n)*math.log2(D[k]/n)
+    
+    return round(-H, 5)
