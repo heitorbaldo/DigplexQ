@@ -5,45 +5,43 @@ Most of the measures are the same code present on Networkx.
 
 import math
 import numpy as np
+import pytest
 import statistics as stats
 import networkx as nx
-from scipy.linalg import expm, logm, sinm, cosm
+from scipy.linalg import expm, logm
 
 from digplexq.digraph_based_complexes import *
 from digplexq.directed_q_analysis import *
+from digplexq.utils import *
 
-
-#__all__ = [
-#    "average_shortest_q_walk_length",
-#    "q_eccentricity",
-#    "q_diameter",
-#    "q_radius",
-#    "q_hubness",
-#    "simplicial_density",
-#    "in_q_degree",
-#    "out_q_degree",
-#    "upper_q_degree",
-#    "in_q_degree_centrality",
-#    "out_q_degree_centrality",
-#    "upper_degree_centrality",
-#    ""q_harmonic_centrality",",
-#    "q_closeness_centrality",
-#    "q_betweenness_centrality",
-#    "q_katz_centrality",
-#    "q_reaching_centrality",
-#    "q_efficiency",
-#    "q_vulnerability,
-#    "q_clustering_coefficient",
-#    "q_modularity_coefficient",
-#    "q_rich_club_coefficient",
-#    "q_communicability",
-#    "q_returnability",
-#    "q_entropy",
-#]
+__all__ = [
+    "average_shortest_q_walk_length",
+    "q_eccentricity",
+    "q_diameter",
+    "q_radius",
+    "q_density",
+    "in_q_degree",
+    "out_q_degree",
+    "in_q_degree_centrality",
+    "out_q_degree_centrality",
+    "upper_q_degree_centrality",
+    "q_closeness_centrality",
+    "q_harmonic_centrality",
+    "q_betweenness_centrality",
+    "q_katz_centrality",
+    "global_q_reaching_centrality",
+    "q_efficiency",
+    "global_q_efficiency",
+    "average_q_clustering_coefficient",
+    "directed_rich_club_coefficient",
+    "q_rich_club_coefficient",
+    "q_communicability",
+    "q_returnability",
+    "structural_q_entropy",
+]
 
 
 #----- Distance-based Measures -----
-
 
 #Average shortest q-walk length
 def average_shortest_q_walk_length(Hq):
@@ -52,17 +50,17 @@ def average_shortest_q_walk_length(Hq):
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         AV = nx.average_shortest_path_length(Gq)
         return AV
-    
+
     #If Hq is not weakly connected:
     else:
         AV = []
@@ -81,17 +79,17 @@ def q_eccentricity(Hq):
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is strongly connected:
     if nx.is_strongly_connected(Gq) == True:
         ecc = nx.eccentricity(Gq)
         return ecc
-    
+
     #If Hq is not strongly connected:
     else:
         return math.inf
@@ -99,74 +97,69 @@ def q_eccentricity(Hq):
 
 def q_diameter(Hq):
     '''Returns the diameter of Gq.
-    M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Parameters
+    ----------
+    Hq: q-adjacency matrix of the directed q-graph.
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is strongly connected:
     if nx.is_strongly_connected(Gq) == True:
         Diam = nx.diameter(Gq)
         return Diam
-    
+
     #If Hq is not strongly connected:
     else:
         return math.inf
 
 
 def q_radius(Hq):
-    '''Returns
+    '''Returns the radio of a digraph.
     Parameters
+    ----------
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is strongly connected:
     if nx.is_strongly_connected(Gq) == True:
         rad = nx.radius(Gq)
         return rad
-    
+
     #If Hq is not strongly connected:
     else:
         return math.inf
 
 
-def q_hubness(Hq):
-    '''Returns
-    Parameters
-    '''
-    return Hq
-
-
 def q_density(Hq):
     '''Returns the
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         s_den = nx.density(Gq)
         return s_den
-    
+
     #If Hq is not weakly connected:
     else:
         SDen = []
@@ -178,23 +171,22 @@ def q_density(Hq):
         Max_den = max(SDen)
         return round(Max_den, 4)
 
-    
+
 
 #----- Degree Centrality -----
 
 def in_q_degree(Hq):
-    '''Returns the
+    '''Returns the in-q-degree of a q-digraph.
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         inDg = []
@@ -202,7 +194,7 @@ def in_q_degree(Hq):
             inDg.append(Gq.in_degree(i))
         Max_in_dc = max(inDg)
         return Max_in_dc
-    
+
     #If Hq is not weakly connected:
     else:
         iDC = []
@@ -216,20 +208,20 @@ def in_q_degree(Hq):
         Max_in_dc = max(iDC)
         return round(Max_in_dc, 4)
 
-    
+
 def out_q_degree(Hq):
-    '''Returns the
+    '''Returns the out-q-degree of a q-digraph.
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         outDg = []
@@ -237,7 +229,7 @@ def out_q_degree(Hq):
             outDg.append(Gq.out_degree(i))
         Max_out_dc = max(outDg)
         return Max_out_dc
-    
+
     #If Hq is not weakly connected:
     else:
         oDC = []
@@ -250,27 +242,27 @@ def out_q_degree(Hq):
             oDC.append(max(outDg))
         Max_out_dc = max(oDC)
         return round(Max_out_dc, 4)
-    
-    
+
+
 def in_q_degree_centrality(Hq):
-    '''Returns the
+    '''Returns the in-q-degree centrality of a q-digraph.
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         in_dc = nx.in_degree_centrality(Gq)
         Max_in_dc = max(dict_to_array(in_dc))
         return Max_in_dc
-    
+
     #If Hq is not weakly connected:
     else:
         iDC = []
@@ -282,26 +274,26 @@ def in_q_degree_centrality(Hq):
         Max_in_dc = max(iDC)
         return round(Max_in_dc, 4)
 
-    
+
 def out_q_degree_centrality(Hq):
-    '''Returns the
+    '''Returns the out-q-degree centrality of a q-digraph.
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         out_dc = nx.out_degree_centrality(Gq)
         Max_out_dc = max(dict_to_array(out_dc))
         return Max_out_dc
-    
+
     #If Hq is not weakly connected:
     else:
         oDC = []
@@ -313,7 +305,7 @@ def out_q_degree_centrality(Hq):
         Max_out_dc = max(oDC)
         return round(Max_out_dc, 4)
 
-    
+
 def upper_q_degree_centrality(M, sigma):
     '''Returns
     Parameters
@@ -328,22 +320,22 @@ def q_closeness_centrality(Hq, wf_improved=False):
     '''Returns the maximum BC value among the maximum BC value of
     each weakly connected component.
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         dscc = nx.closeness_centrality(Gq, wf_improved=wf_improved)
         Max_dscc = max(dict_to_array(dscc))
         return Max_dscc
-    
+
     #If Hq is not weakly connected:
     else:
         CC = []
@@ -354,28 +346,28 @@ def q_closeness_centrality(Hq, wf_improved=False):
             CC.append(max(dict_to_array(dscc)))
         Max_dscc = max(CC)
         return round(Max_dscc, 4)
-        
+
 
 #----- Harmonic Centrality -----
 def q_harmonic_centrality(Hq):
     '''Returns
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         shc = nx.harmonic_centrality(Gq)
         Max_shc = max(dict_to_array(shc))
         return Max_shc
-    
+
     #If Hq is not weakly connected:
     else:
         HC = []
@@ -387,28 +379,28 @@ def q_harmonic_centrality(Hq):
         Max_shc = max(HC)
         return round(Max_shc, 4)
 
-    
-    
+
+
 def q_betweenness_centrality(Hq, normalized=True, weight=None):
     '''Returns the maximum BC value among the maximum BC value of
     each weakly connected component.
     M: adjacency matrix of the directed q-graph.
-    Rerturn: 
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
         dsbc = nx.betweenness_centrality(Gq, normalized=normalized, weight=weight)
         Max_dsbc = max(dict_to_array(dsbc))
         return round(Max_dsbc, 4)
-    
+
     #If Hq is not weakly connected:
     else:
         BCC = []
@@ -419,9 +411,35 @@ def q_betweenness_centrality(Hq, normalized=True, weight=None):
             BCC.append(max(dict_to_array(dsbc)))
         Max_dsbc = max(BCC)
         return round(Max_dsbc, 4)
-        
 
-        
+
+
+def q_katz_centrality(Hq, alpha=0.1, beta=1.0, normalized=True, weight=None):
+    '''Returns the maximum Katz centrality.
+    Parameters
+    ---------
+    Hq:
+    '''
+    if isinstance(Hq, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gq) == True:
+        return 0
+    
+    a1 = 1/max(np.linalg.eigvals(Hq))
+    if a1 < 0.1:
+        alpha = np.real(a1)/3
+    else:
+        alpha = 0.1
+
+    katz = nx.katz_centrality_numpy(Gq, alpha=alpha, beta=beta, normalized=normalized, weight=weight)
+    
+    Max_katz = max(dict_to_array(katz))
+    return round(Max_katz, 4)
+
+
 #global_reaching_centrality(G, weight=None, normalized=True)
 def global_q_reaching_centrality(Hq, normalized=False):
     '''Returns
@@ -429,118 +447,110 @@ def global_q_reaching_centrality(Hq, normalized=False):
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
-    #If Hq is weakly connected:
-    if nx.is_weakly_connected(Gq) == True:
-        gsrc = nx.global_reaching_centrality(Gq, normalized=normalized)
-        return round(gsrc, 4)
-    
-    #If Hq is not weakly connected:
-    else:
-        GRC = []
-        wcc = adjacency_matrices_wcc(Hq)
-        for c in wcc:
-            Sq = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-            gsrc = nx.global_reaching_centrality(Sq, normalized=normalized)
-            GRC.append(gsrc)
-        Max_gsrc = max(GRC)
-        return round(Max_gsrc, 4)
+
+    gsrc = nx.global_reaching_centrality(Gq, normalized=normalized)
+    return round(gsrc, 5)
 
 
-#local_reaching_centrality(G, v, paths=None, weight=None, normalized=True)
-def local_q_reaching_centrality(Hq, simplex, normalized=False):
+
+#----- Efficiency and Global Efficiency -----
+
+def q_efficiency(Hq, i):
     '''Returns
-    Parameters
-    '''
-    return Hq
-        
-
-#katz_centrality(G, alpha=0.1, beta=1.0, max_iter=1000, tol=1e-06, nstart=None, normalized=True, weight=None)
-def q_katz_centrality(Hq, normalized=True, weight=None):
-    '''Returns the maximum Katz centrality.
-    Parameters
-    ---------
-    Hq: 
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
     
-    a1 = 1/max(np.linalg.eigvals(Hq))
-    if a1 < 0.1:
-        alpha = a1/3
-    else:
-        alpha = 0.1
+    n = len(Hq)
+    nE_i = 0
     
-    katz = nx.katz_centrality(Gq, alpha=alpha, normalized=normalized, weight=weight)
-    Max_katz = max(dict_to_array(katz))
-    return round(Max_katz, 4)
+    for j in range(n):
+        if j != i:
+            try:
+                SPL = nx.shortest_path_length(Gq, source=i, target=j, weight=None, method='dijkstra')
+                if SPL != 0:
+                    nE_i += 1/SPL
+                else:
+                    pass
+            except nx.NetworkXNoPath:
+                pass
+        else:
+            pass
+            
+    E_i = nE_i/(n-1)
+    return round(E_i, 5)
 
-       
-    
-#flow_hierarchy / flow_hierarchy(G)
-def q_flow_hierarchy(Hq):
-    '''Returns
-    Parameters
-    '''
-    return Hq
 
-
-
-#----- Efficiency and Vulnerability -----
-
-#
 def global_q_efficiency(Hq):
     '''Returns
-    This function compute the amount of
-    directed bicliques
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
     
-    return Hq
-
-
-#
-def q_vulnerability(Hq):
-    '''Returns
-    '''
-    return Hq
+    n = len(Hq)
+    nGE = 0
+    for i in range(n):
+        nGE += q_efficiency(Hq, i)
+    
+    GE = nGE/n
+    return round(GE, 5)
 
 
 
 
 #----- Segregation Measures -----
 
-#
-def q_clustering_coefficient(Hq):
+def average_q_clustering_coefficient(Hq):
     '''Returns
     '''
-    return Hq
-        
+    if isinstance(Hq, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
 
-#
-def q_modularity_coefficient(Hq):
-    '''Returns the 
+    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gq) == True:
+        return 0
+    
+    ACC = nx.average_clustering(Gq, nodes=None, weight=None, count_zeros=True)
+    return round(ACC, 4)
+
+
+
+def directed_rich_club_coefficient(M, k):
+    '''Returns the directed rich-club coefficient phi(k) = Ek/Nk(Nk-1).
+    Parameters
+    ----------
+    M: adjacency matrix.
+    k: integer.
+    
     '''
-    return Hq
+    if isinstance(Hq, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gq) == True:
+        return 0
+    
+    drc = M
+    return M
 
 
-#rich_club_coefficient(G, normalized=True, Q=100, seed=None)
 def q_rich_club_coefficient(Hq):
     '''Returns
     '''
@@ -550,37 +560,75 @@ def q_rich_club_coefficient(Hq):
 
 #----- Communicability -----
 
+def communicability(A, i, j):
+    '''Returns the communicability of the nodes i and j.
+    '''
+    if isinstance(A, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    Gr = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gr) == True:
+        return 0
+    
+    G = expm(A)
+    G_ij = G[i,j]
+    return round(G_ij, 5)
+
 
 def q_communicability(Hq):
-    '''Returns
+    '''Returns the communicability of the nodes i and j.
     '''
-    return Hq
+    if isinstance(Hq, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    G = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+
+    if nx.is_empty(G) == True:
+        return 0
+    
+    V = []
+    for i in range(len(Hq)):
+        for j in range(len(Hq)):
+            Gij = communicability(Hq, i, j)
+            V.append(Gij)
+    
+    Max_Gij = max(V)
+    return round(Max_Gij, 5)
+
 
 
 #----- Returnability -----
 
-def q_returnability(Hq, normalized=True):
+def q_returnability(A, normalized=True):
     '''Returns the simplicial q-returnability.
     Parameters
     ---------
     Hq: (NumPy matrix) q-adjacency matrix.
     '''
-    if isinstance(Hq, np.ndarray) == False:
+    if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
-    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
-    if nx.is_empty(Gq) == True:
+
+    Gr = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gr) == True:
         return 0
-    
-    Exp = expm(Hq)
-    K_q = np.trace(Exp) - len(Hq)
-    
+
+    Exp = expm(A)
+    K = np.trace(Exp) - len(A)
+
     if normalized == True:
-        return round(K_q, 4)
+        A_wde = remove_double_edges(A)
+        G = nx.Graph(A_wde)
+        U = nx.to_numpy_matrix(G)
         
+        Exp_und = Exp = expm(U)
+        
+        K_und = np.trace(Exp_und) - len(U)
+        Kn = K/K_und
+        return round(Kn, 5)
     else:
-        return round(K_q, 4)
+        return round(K, 5)
 
 
 #----- Entropies -----
@@ -589,8 +637,3 @@ def structural_q_entropy(Hq):
     '''Returns
     '''
     return Hq
-
-
-
-
-    
