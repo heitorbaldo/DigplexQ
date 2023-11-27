@@ -165,26 +165,36 @@ def out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'):
 
 
 def in_q_forman_ricci_curvature_max(M):
+    '''Returns the maximum of the in-q-Forman-Ricci curvature among all vertices.
+    '''
+    DFC = DirectedFlagComplex(M, "by_dimension_without_nodes")
     
-    DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+    if DFC == []:
+        return 0
+    
     n = len(M)
     inFRC = []
     
     for v in range(n):
-        inFRC.append(in_q_forman_ricci_curvature(M, DFC_dim_none, v, weight_func='max_in_out'))
+        inFRC.append(in_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'))
      
     Max_inFRC = max(inFRC)
     return Max_inFRC
 
 
 def out_q_forman_ricci_curvature_max(M):
+    '''Returns the maximum of the out-q-Forman-Ricci curvature among all vertices.
+    '''
+    DFC = DirectedFlagComplex(M, "by_dimension_without_nodes")
     
-    DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+    if DFC == []:
+        return 0
+    
     n = len(M)
     outFRC = []
     
     for v in range(n):
-        inFRC.append(out_q_forman_ricci_curvature(M, DFC_dim_none, v, weight_func='max_in_out'))
+        inFRC.append(out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'))
      
     Max_outFRC = max(outFRC)
     return Max_outFRC
