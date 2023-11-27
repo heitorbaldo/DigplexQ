@@ -18,6 +18,8 @@ __all__ = [
     "q_forman_ricci_curvature",
     "in_q_forman_ricci_curvature",
     "out_q_forman_ricci_curvature",
+    "in_q_forman_ricci_curvature_max",
+    "out_q_forman_ricci_curvature_max",
 ]
 
 
@@ -26,6 +28,12 @@ def incoming_edges(DFC, edge_curv):
     Parameters
     ----------
     '''
+    if DFC == []:
+        return []
+    
+    if edge_curv not in DFC[0]:
+        return []
+    
     in_edges = []
     for edge in DFC[0]:
         if edge[1] == edge_curv[0]:
@@ -40,6 +48,12 @@ def outgoing_edges(DFC, edge_curv):
     Parameters
     ----------
     '''
+    if DFC == []:
+        return []
+    
+    if edge_curv not in DFC[0]:
+        return []
+    
     out_edges = []
     for edge in DFC[0]:
         if edge[0] == edge_curv[1]:
@@ -53,6 +67,9 @@ def incoming_edges_vertex(DFC, v):
     Parameters
     ----------
     '''
+    if DFC == []:
+        return []
+    
     in_edges = []
     for edge in DFC[0]:
         if edge[1] == v:
@@ -67,6 +84,9 @@ def outgoing_edges_vertex(DFC, v):
     Parameters
     ----------
     '''
+    if DFC == []:
+        return []
+    
     out_edges = []
     for edge in DFC[0]:
         if edge[0] == v:
@@ -76,13 +96,19 @@ def outgoing_edges_vertex(DFC, v):
     return out_edges
    
 
-def q_forman_ricci_curvature(M, DFC, edge_curv, weight_func='max'):
+def q_forman_ricci_curvature(M, DFC, edge_curv, weight_func='max_in_out'):
     '''Returns the Forman-Ricci curvature of a weighted directed edge.
     Parameters
     ----------
     M: NumPy matrix.
     edge: NumPy array.
     '''
+    if DFC == []:
+        return 0
+    
+    if edge_curv not in DFC[0]:
+        return 0
+    
     S0_k = 0
     S1_k = 0
     S2_k = 0
@@ -106,7 +132,7 @@ def q_forman_ricci_curvature(M, DFC, edge_curv, weight_func='max'):
     return round(FRC, 5)
    
 
-def in_q_forman_ricci_curvature(M, DFC, v, weight_func='max'):
+def in_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'):
     '''Returns the in-q-Forman-Ricci curvature of a vertex.
     Parameters
     ----------
@@ -117,12 +143,12 @@ def in_q_forman_ricci_curvature(M, DFC, v, weight_func='max'):
     IE = incoming_edges_vertex(DFC, v)
     
     for edge in IE:    
-        inFRC += q_forman_ricci_curvature(M, DFC, edge, weight_func='max')
+        inFRC += q_forman_ricci_curvature(M, DFC, edge, weight_func=weight_func)
     
     return round(inFRC, 5)
 
 
-def out_q_forman_ricci_curvature(M, DFC, v, weight_func='max'):
+def out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'):
     '''Returns the in-q-Forman-Ricci curvature of a vertex.
     Parameters
     ----------
@@ -132,8 +158,33 @@ def out_q_forman_ricci_curvature(M, DFC, v, weight_func='max'):
     outFRC = 0
     IO = outgoing_edges_vertex(DFC, v)
     
-    for edge in IO:    
-        outFRC += q_forman_ricci_curvature(M, DFC, edge, weight_func='max')
+    for edge in IO:
+        outFRC += q_forman_ricci_curvature(M, DFC, edge, weight_func=weight_func)
     
     return round(outFRC, 5)
 
+
+def in_q_forman_ricci_curvature_max(M):
+    
+    DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+    n = len(M)
+    inFRC = []
+    
+    for v in range(n):
+        inFRC.append(in_q_forman_ricci_curvature(M, DFC_dim_none, v, weight_func='max_in_out'))
+     
+    Max_inFRC = max(inFRC)
+    return Max_inFRC
+
+
+def out_q_forman_ricci_curvature_max(M):
+    
+    DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+    n = len(M)
+    outFRC = []
+    
+    for v in range(n):
+        inFRC.append(out_q_forman_ricci_curvature(M, DFC_dim_none, v, weight_func='max_in_out'))
+     
+    Max_outFRC = max(outFRC)
+    return Max_outFRC
