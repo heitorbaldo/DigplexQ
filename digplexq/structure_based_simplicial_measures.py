@@ -33,8 +33,9 @@ __all__ = [
     "q_efficiency",
     "global_q_efficiency",
     "average_q_clustering_coefficient",
-    "directed_rich_club_coefficient",
-    "q_rich_club_coefficient",
+    "in_q_degree_rich_club_coefficient",
+    "out_q_degree_rich_club_coefficient",
+    "communicability",
     "q_communicability",
     "q_returnability",
     "structural_q_entropy",
@@ -512,7 +513,6 @@ def global_q_efficiency(Hq):
 
 
 
-
 #----- Segregation Measures -----
 
 def average_q_clustering_coefficient(Hq):
@@ -531,30 +531,76 @@ def average_q_clustering_coefficient(Hq):
 
 
 
-def directed_rich_club_coefficient(M, k):
-    '''Returns the directed rich-club coefficient phi(k) = Ek/Nk(Nk-1).
+def in_q_degree_rich_club_coefficient(M, k=6):
+    '''Returns the in-degree rich-club coefficient phi(k) = E^{in}_k/N^{in}_k(N^{in}_k-1).
     Parameters
     ----------
-    M: adjacency matrix.
+    M: q-adjacency matrix.
     k: integer.
-    
     '''
-    if isinstance(Hq, np.ndarray) == False:
+    if isinstance(M, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+    Gq = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
 
     if nx.is_empty(Gq) == True:
         return 0
     
-    drc = M
-    return M
+    N_k = 0
+    n = len(M)
+    nodes = []
+    
+    for i in range(n):
+        indeg = Gq.in_degree(i)
+        if indeg > k:
+            N_k += 1
+            nodes.append(i)
+        else:
+            pass
+    
+    if N_k > 1: 
+        H = Gq.subgraph(nodes)
+        E_K = Gq.number_of_edges()
+        RCC = E_K/(N_k*(N_k - 1))
+        return round(RCC, 5)
+    else:
+        return 0
 
-
-def q_rich_club_coefficient(Hq):
-    '''Returns
+    
+def out_q_degree_rich_club_coefficient(M, k=6):
+    '''Returns the out-degree rich-club coefficient phi(k) = E^{out}_k/N^{out}_k(N^{out}_k-1).
+    Parameters
+    ----------
+    M: q-adjacency matrix.
+    k: integer.
     '''
-    return Hq
+    if isinstance(M, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    Gq = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+
+    if nx.is_empty(Gq) == True:
+        return 0
+    
+    N_k = 0
+    n = len(M)
+    nodes = []
+    
+    for i in range(n):
+        outdeg = Gq.out_degree(i)
+        if outdeg > k:
+            N_k += 1
+            nodes.append(i)
+        else:
+            pass
+    
+    if N_k > 1: 
+        H = Gq.subgraph(nodes)
+        E_K = Gq.number_of_edges()
+        RCC = E_K/(N_k*(N_k - 1))
+        return round(RCC, 5)
+    else:
+        return 0
 
 
 
