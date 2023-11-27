@@ -84,7 +84,6 @@ def q_spectral_entropy(L):
     ---------
     L: Hodge q-Laplacian.
     '''
-    L = L.toarray()
     EigenVal = np.linalg.eig(L)[0]
     
     EVN = []
@@ -95,7 +94,9 @@ def q_spectral_entropy(L):
     for mu_i in EVN:
         if mu_i != 0:
             H += mu_i*math.log2(mu_i)
-    return -round(H, 5)
+    
+    Hq = np.real(H)
+    return round(Hq, 5)
 
 
 def q_von_Neuman_entropy(L, b=1):
@@ -107,11 +108,11 @@ def q_von_Neuman_entropy(L, b=1):
     '''
     rho = q_spectral_density(L, b)
     S = -np.trace(rho*logm(rho))
-    return S
+    return round(S, 5)
 
 
-def q_KL_divergence(L1, L2, b):
-    '''Returns Kullback-Liebler divergence.
+def q_KL_divergence(L1, L2, b=1):
+    '''Returns the q-Kullback-Liebler divergence.
     Parameters
     ---------
     L1: Hodge n-Laplacian.
@@ -121,7 +122,7 @@ def q_KL_divergence(L1, L2, b):
     rho1 = q_spectral_density(L1, b)
     rho2 = q_spectral_density(L2, b)
     KL = np.trace(rho1*(logm(rho1) - logm(rho2)))
-    return KL
+    return round(KL, 5)
 
 
 def q_spectral_distance(L1, L2):
@@ -149,7 +150,9 @@ def q_spectral_distance(L1, L2):
             Smax.append(abs(Eigen2[k]))
     S = sum(Smin) + sum(Smax)
     N = sum(Eigen1) + sum(Eigen2)
-    return S/N
+    
+    dist = S/N 
+    return round(np.real(dist), 5)
 
 
 def q_eigenvector_centrality(Hq, weight=None):
