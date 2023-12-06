@@ -177,31 +177,79 @@ def fifth_topological_distance(M1, M2, comp="flag"):
 
 #----- Simplicial Kernels -----
 
-def histogram_cosine_kernel(simplices1, simplices2):
-    '''Returns the histogram cossine kernel.
+
+def histogram_cosine_kernel(M1, M2):
+    '''Returns the histogram cosine kernel (HCK).
     Parameters
     ----------
-    x: structure vector for X.
-    y: structure vector for Y.
+    X: (array) simplicial complex.
+    Y: (array) simplicial complex.
     '''
-    hist1, hist2 = histograms(simplices1, simplices2)
+    
+    if np.all(M1==0) == True or np.all(M2==0) == True:
+        return 1.0
+    
+    X = DirectedFlagComplex(M1, split='by_dimension_without_nodes')
+    Y = DirectedFlagComplex(M2, split='by_dimension_without_nodes')
+    
+    v1 = f_count(X, Y, i=1)
+    v2 = f_count(X, Y, i=2)
+    
+    #v1 = first_flag_topological_structure_vector(X)
+    #v2 = first_flag_topological_structure_vector(Y)
+    
+    if len(v1) != len(v2):
+        diff = abs(len(v1)-len(v2))
+        if len(v1) > len(v2):  
+            for i in range(diff):
+                v2.append(0)
+        else:
+            for i in range(diff):
+                v1.append(0)
+    
+    x = np.array(v1)
+    y = np.array(v2)
+    
+    if np.all(x==0) == True and np.all(y==0) == True:
+        return 0
 
-    dot_product = np.dot(hist1, hist2)
-    norm1 = np.linalg.norm(hist1)
-    norm2 = np.linalg.norm(hist2)
+    dot_product = np.dot(x, y)
+    norm1 = np.linalg.norm(x)
+    norm2 = np.linalg.norm(y)
 
     cosine = dot_product / (norm1 * norm2)
-    return cosine
+    return round(cosine, 6)
 
 
-def jaccard_kernel(x, y):
-    '''Returns the Jaccard kernel.
-    Parameters
+def jaccard_kernel(M1, M2):
+    '''Returns the Jaccard kernel between X and Y.
+   Parameters
     ----------
-    x: structure vector for X.
-    y: structure vector for Y.
+    X: (array) simplicial complex.
+    Y: (array) simplicial complex.
     '''
-    return x
-
+    
+    if np.all(M1==0) == True or np.all(M2==0) == True:
+        return 1.0
+    
+    X = DirectedFlagComplex(M1, split='by_dimension_without_nodes')
+    Y = DirectedFlagComplex(M2, split='by_dimension_without_nodes')
+    
+    Union = []
+    Inter = []
+    
+    n1 = len(X)
+    n2 = len(Y)
+    n = min(n1, n2)
+    m = max(n1, n2)
+    
+    for k in range(m):
+        Union += union_k(X, Y, k)
+    
+    for k in range(n):
+        Inter += intersection_k(X, Y, k)
+    
+    J = 1 - len(Inter)/len(Union)
+    return round(J, 5)
 
     
