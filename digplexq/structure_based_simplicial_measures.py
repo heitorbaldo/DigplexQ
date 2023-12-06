@@ -47,9 +47,12 @@ __all__ = [
 #----- Distance-based Measures -----
 
 #Average shortest q-walk length
-def average_shortest_q_walk_length(Hq):
+def average_shortest_q_walk_length(Hq, weight=None):
     '''Returns
     Parameters
+    ----------
+    Hq: q-dajacency matrix.
+    weight: (string) if None; if 'reciprocal'.
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
@@ -61,7 +64,7 @@ def average_shortest_q_walk_length(Hq):
 
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
-        AV = nx.average_shortest_path_length(Gq)
+        AV = nx.average_shortest_path_length(Gq, weight=weight)
         return AV
 
     #If Hq is not weakly connected:
@@ -70,7 +73,7 @@ def average_shortest_q_walk_length(Hq):
         wcc = adjacency_matrices_wcc(Hq)
         for c in wcc:
             Sq = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-            AV.append(nx.average_shortest_path_length(Sq))
+            AV.append(nx.average_shortest_path_length(Sq, weight=weight))
         Max_av = max(AV)
         return round(Max_av, 4)
     return Hq
@@ -387,7 +390,10 @@ def q_harmonic_centrality(Hq):
 def q_betweenness_centrality(Hq, normalized=True, weight=None):
     '''Returns the maximum BC value among the maximum BC value of
     each weakly connected component.
+    Parameters
+    ----------
     M: adjacency matrix of the directed q-graph.
+    weight: (string) if None; if 'reciprocal'.
     Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
@@ -422,6 +428,7 @@ def q_katz_centrality(Hq, alpha=0.1, beta=1.0, normalized=True, weight=None):
     Parameters
     ---------
     Hq:
+    weight: (string) if None; if 'reciprocal'.
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
@@ -517,8 +524,11 @@ def global_q_efficiency(Hq):
 
 #----- Segregation Measures -----
 
-def average_q_clustering_coefficient(Hq):
+def average_q_clustering_coefficient(Hq, weight=None):
     '''Returns
+    Parameters
+    ----------
+    weight: (string) if None; if 'reciprocal'.
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
@@ -528,7 +538,7 @@ def average_q_clustering_coefficient(Hq):
     if nx.is_empty(Gq) == True:
         return 0
     
-    ACC = nx.average_clustering(Gq, nodes=None, weight=None, count_zeros=True)
+    ACC = nx.average_clustering(Gq, nodes=None, weight=weight, count_zeros=True)
     return round(ACC, 4)
 
 
@@ -652,7 +662,7 @@ def q_returnability(A, normalized=True):
     '''Returns the simplicial q-returnability.
     Parameters
     ---------
-    Hq: (NumPy matrix) q-adjacency matrix.
+    A: (NumPy matrix) q-adjacency matrix.
     '''
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
@@ -698,7 +708,7 @@ def q_structural_entropy(Hq):
     
     n = len(Hq)
     sum_Q = 0
-    Hq = 0
+    H = 0
     sum_Qi = []
     
     for i in range(n):
@@ -710,6 +720,9 @@ def q_structural_entropy(Hq):
     for i in range(n):
         for j in range(n):
             sum_Q += communicability(Hq, i, j)
+    
+    if sum_Q == 0:
+        return 0
     
     for k in range(n):
         H += (sum_Qi[k]/sum_Q)*math.log2(sum_Qi[k]/sum_Q)

@@ -10,10 +10,13 @@ from digplexq.digraph_based_complexes import *
 from digplexq.directed_q_analysis import *
 
 __all_ = [
+    "union_k",
+    "intersection_k",
     "enumerate_double_edges",
     "enumerate_directed_n_cycles",
     "enumerate_edges_elementary_directed_quase_clique",
     "enumerate_invariant_elementary_n_paths",
+    "f_count",
     "count_weakly_q_connected_components",
     "count_n_paths",
     "count_directed_n_cliques",
@@ -28,15 +31,59 @@ __all_ = [
     "fifth_path_topological_structure_vector",
     "first_path_topological_structure_vector",
     "second_path_topological_structure_vector",
-    "third_path_topological_structure_vector",
-    "fourth_path_topological_structure_vector",
-    "fifth_path_topological_structure_vector",
 ]
 
 
 #--------------------------------
 
- 
+
+def union_k(X, Y, k):
+    '''Returns the union of the k-simplices between X and Y.
+    '''
+    Diff = []
+    n1 = len(X)
+    n2 = len(Y)
+    
+    if k >= n1 and k >= n2:
+        return []
+        
+    if k > n1 and k < n2:
+        return Y[k]
+    
+    if k < n1 and k > n2:
+        return X[k]
+    
+    if k < n1 and k < n2:
+        for simplex in Y[k]:
+            if simplex not in X[k]:
+                Diff.append(simplex)
+        Union_k = Diff + X[k]
+        return Union_k
+
+
+def intersection_k(X, Y, k):
+    '''Returns the common k-simplices between X and Y.
+    '''
+    Inter = []
+    n1 = len(X)
+    n2 = len(Y)
+    
+    if k >= n1 and k >= n2:
+        return []
+        
+    if k > n1 and k < n2:
+        return Y[k]
+    
+    if k < n1 and k > n2:
+        return X[k]
+    
+    if k < n1 and k < n2:
+        for simplex in Y[k]:
+            if simplex in X[k]:
+                Inter.append(simplex)
+        return Inter
+
+
 def enumerate_double_edges(M):
     '''Returns all double edges.
     Parameters
@@ -112,6 +159,36 @@ def enumerate_invariant_elementary_n_paths(PC, n):
 
 
 #------------------------------
+
+def f_count(X, Y, i=1):
+    '''Returns the vector whose entries are the number of directed k-cliques in the digraph.
+    Parameters
+    ----------
+    X: (array) directed flag complex.
+    Y: (array) directed flag complex.
+    '''
+    f = []
+    n1 = len(X)
+    n2 = len(Y)
+       
+    if i == 1:
+        for k in range(n1):
+            counter = 0
+            for simplex in union_k(X, Y, k):
+                if simplex in X[k]:
+                    counter += 1
+            f.append(counter)
+    
+    if i == 2:
+        for k in range(n2):
+            counter = 0
+            for simplex in union_k(X, Y, k):
+                if simplex in Y[k]:
+                    counter += 1
+            f.append(counter)
+        
+    return f
+
 
 def count_weakly_q_connected_components(Hq):
     '''Returns all weakly q-connected components.
@@ -214,7 +291,6 @@ def zscore_motif(M):
 #------------------------------
 
 
-
 def first_flag_topological_structure_vector(DFC):
     '''Returns a vector which entries are the quantities of k-dimensional directed cliques.
     Parameters
@@ -226,7 +302,7 @@ def first_flag_topological_structure_vector(DFC):
 
 
 def second_flag_topological_structure_vector(Hq):
-    '''Returns a vector.
+    '''Returns a vector whose entries are the number of weakly connected components of the digraph.
     Parameters
     ----------
     Hq: q-adjacency matrix.
@@ -236,7 +312,7 @@ def second_flag_topological_structure_vector(Hq):
 
 
 def third_flag_topological_structure_vector(Hq):
-    '''Returns a vector.
+    '''Returns a vector whose entries are the number of strongly connected components of the digraph.
     Parameters
     ----------
     Hq: q-adjacency matrix.
@@ -245,29 +321,33 @@ def third_flag_topological_structure_vector(Hq):
     return scc
 
 
-def fourth_flag_topological_structure_vector(M):
-    '''Returns a vector. 
+def fourth_flag_topological_structure_vector(M, k=0):
+    '''Returns the vector whose entries are the Betti numbers associated to the filtration.
     Parameters
     ----------
-    DFC: (array) directed flag complex.
+    M: adjacency matrix.
+    k: (integer) k-th homology group.
     '''
-    v = betti_numbers(M, k=0)    
-    return v
+    v_k = betti_numbers(M, k=k)
+    return v_k
 
 
-def fifth_flag_topological_structure_vector(M):
-    '''Returns a vector.
+def fifth_flag_topological_structure_vector(M, k=1):
+    '''Returns the vector whose entries are the length of each barcode (li = di - bi).
     Parameters
     ----------
+    M: adjacency matrix.
+    k: (integer) k-th homology group.
     '''
-    bcl = barcode_length(M)
-    return bcl
+    bc_k = barcode_length(M, k=k)
+    return bc_k
 
 
 #------------------------------
 
 def first_path_topological_structure_vector(PC):
-    '''Returns a vector.
+    '''Returns a vector whose entries are the number of invariant elementary directed 
+    quasi-clique present in the digraph.
     Parameters
     ----------
     PC: (array) path complex.
@@ -281,27 +361,13 @@ def first_path_topological_structure_vector(PC):
 
 
 def second_path_topological_structure_vector(PC):
-    '''Returns a vector.
+    '''Returns a vector whose entries are the length of each n-path in the digraph.
+    Parameters
+    ----------
+    PC: (array) path complex.
     '''
     count_paths = count_n_paths(PC)
     return count_paths
 
-
-def third_path_topological_structure_vector(M):
-    '''Returns a vector. 
-    '''
-    return M
-
-
-def fourth_path_topological_structure_vector(M):
-    '''Returns a vector. 
-    '''
-    return M
-
-
-def fifth_path_topological_structure_vector(M):
-    '''Returns a vector. 
-    '''
-    return M
 
 

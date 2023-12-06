@@ -63,6 +63,10 @@ def birth_death_betti(M):
 def barcode_length(M, k=0):
     '''Returns the length of each barcode.
     '''
+    
+    if np.all(M==0) == True:
+        return 0
+    
     L = []
     SM = csr_matrix(M)
     diagrams = FlagserPersistence(homology_dimensions=(0,1)).fit_transform([SM]);
@@ -97,6 +101,10 @@ def betti_numbers(M, k=0):
     '''Returns the k-th Betti numbers associated with the filtration.
     M: adjacency matrix.
     '''
+    
+    if np.all(M==0) == True:
+        return 0
+    
     SM = csr_matrix(M)
     diag = FlagserPersistence(homology_dimensions=(0,1)).fit_transform([SM]);
     
