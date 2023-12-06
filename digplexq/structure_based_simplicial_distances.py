@@ -177,7 +177,7 @@ def fifth_topological_distance(M1, M2, comp="flag"):
 
 #----- Simplicial Kernels -----
 
-def histogram_cossine_kernel(simplices1, simplices2):
+def histogram_cosine_kernel(simplices1, simplices2):
     '''Returns the histogram cossine kernel.
     Parameters
     ----------
