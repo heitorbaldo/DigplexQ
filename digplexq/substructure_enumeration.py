@@ -5,23 +5,33 @@ Substructure enumeration.
 import numpy as np
 import networkx as nx
 
+from digplexq.persistent_homology import *
 from digplexq.digraph_based_complexes import *
 from digplexq.directed_q_analysis import *
 
-#__all_ = [
-    #"enumerate_double_edges",
-    #"enumerate_directed_n_cycles",
-    #"enumerate_edges_elementary_directed_quase_clique",
-    #"enumerate_invariant_elementary_n_paths",
-    #"count_weakly_q_connected_components",
-    #"count_n_paths",
-    #"count_directed_n_cliques",
-    #"count_directed_quasi_cliques",
-    #"count_squares",
-    #"count_double_edges",
-    #"count_n_cycles",
-    #"first_topological_structure_vector",
-#]
+__all_ = [
+    "enumerate_double_edges",
+    "enumerate_directed_n_cycles",
+    "enumerate_edges_elementary_directed_quase_clique",
+    "enumerate_invariant_elementary_n_paths",
+    "count_weakly_q_connected_components",
+    "count_n_paths",
+    "count_directed_n_cliques",
+    "count_elmentary_directed_quasi_cliques",
+    "count_double_edges",
+    "count_directed_n_cycles",
+    "zscore_motif",
+    "first_flag_topological_structure_vector",
+    "second_flag_topological_structure_vector",
+    "third_flag_topological_structure_vector",
+    "fourth_flag_topological_structure_vector",
+    "fifth_path_topological_structure_vector",
+    "first_path_topological_structure_vector",
+    "second_path_topological_structure_vector",
+    "third_path_topological_structure_vector",
+    "fourth_path_topological_structure_vector",
+    "fifth_path_topological_structure_vector",
+]
 
 
 #--------------------------------
@@ -78,9 +88,13 @@ def enumerate_edges_elementary_directed_quase_clique(path):
 def enumerate_invariant_elementary_n_paths(PC, n):
     '''Returns all invariant elementary n-paths.
     M: (NumPy array) a path complex.
+    n: (integer) 
     '''
     if n < 1:
         raise ValueError("n must be an integer greater than or equal to 1.")
+       
+    if n > len(PC):
+        return []
     
     #PC = PathComplex(M)
     Elem_Inv_Paths = []
@@ -94,6 +108,7 @@ def enumerate_invariant_elementary_n_paths(PC, n):
         if len(DQC_edges) == len(EdgesDQC):
             Elem_Inv_Paths.append(path[0])
     return Elem_Inv_Paths
+
 
 
 #------------------------------
@@ -164,17 +179,7 @@ def count_elmentary_directed_quasi_cliques(PC, n):
     return qtd_n_dqc
 
 
-#Amount of squares
-def count_squares(M):
-    '''Returns all 
-    '''
-    Qtd = []
-    for i in range(len(DFC)):
-        Qtd.append(len(DFC[i]))
-    return Qtd
 
-
-#Amount of edges
 def count_edges(M):
     '''Returns all 
     '''
@@ -185,53 +190,118 @@ def count_edges(M):
                 n+=1
     return n
 
-#Amount of double edges
+
 def count_double_edges(M):
-    '''Returns all 
+    '''Returns the number of double-edges.
     '''
-    Qtd = []
-    for i in range(len(DFC)):
-        Qtd.append(len(DFC[i]))
+    Qtd = len(enumerate_double_edges(M))
     return Qtd
         
     
-#Amount of cycles
-def count_n_cycles(M):
-    '''Returns all 
+def count_directed_n_cycles(M):
+    '''Returns the number of directed cycles.
     '''
-    Qtd = []
-    for i in range(len(DFC)):
-        Qtd.append(len(DFC[i]))
+    Qtd = len(enumerate_directed_n_cycles(M))
     return Qtd   
 
+
+def zscore_motif(M):
+    '''Returns all 
+    '''
+    return M
 
 
 #------------------------------
 
-def first_structure_vector(M):
-    '''Returns all 
+
+
+def first_flag_topological_structure_vector(DFC):
+    '''Returns a vector which entries are the quantities of k-dimensional directed cliques.
+    Parameters
+    ----------
+    DFC: (array) directed flag complex.
     '''
-    return M
+    count_dir_cliques = count_directed_n_cliques(DFC)
+    return count_dir_cliques
 
 
-def second_structure_vector(M):
-    '''Returns all 
+def second_flag_topological_structure_vector(Hq):
+    '''Returns a vector.
+    Parameters
+    ----------
+    Hq: q-adjacency matrix.
     '''
-    return M
+    wcc = count_weakly_q_connected_components(Hq)
+    return wcc
 
 
-def first_topological_structure_vector(M):
-    '''Returns all 
+def third_flag_topological_structure_vector(Hq):
+    '''Returns a vector.
+    Parameters
+    ----------
+    Hq: q-adjacency matrix.
     '''
-    return M
+    scc = count_strongly_q_connected_components(Hq)
+    return scc
 
 
-def second_topological_structure_vector(PC, n):
-    '''Returns a list of all 
+def fourth_flag_topological_structure_vector(M):
+    '''Returns a vector. 
+    Parameters
+    ----------
+    DFC: (array) directed flag complex.
     '''
+    v = betti_numbers(M, k=0)    
+    return v
+
+
+def fifth_flag_topological_structure_vector(M):
+    '''Returns a vector.
+    Parameters
+    ----------
+    '''
+    bcl = barcode_length(M)
+    return bcl
+
+
+#------------------------------
+
+def first_path_topological_structure_vector(PC):
+    '''Returns a vector.
+    Parameters
+    ----------
+    PC: (array) path complex.
+    '''
+    n = len(PC)
     Struct_Vec = []
-    for i in range(n):
+    for i in range(1,n):
         qtd_i_dqc = len(enumerate_invariant_elementary_n_paths(PC, i))
         Struct_Vec.append(qtd_i_dqc)
     return Struct_Vec
+
+
+def second_path_topological_structure_vector(PC):
+    '''Returns a vector.
+    '''
+    count_paths = count_n_paths(PC)
+    return count_paths
+
+
+def third_path_topological_structure_vector(M):
+    '''Returns a vector. 
+    '''
+    return M
+
+
+def fourth_path_topological_structure_vector(M):
+    '''Returns a vector. 
+    '''
+    return M
+
+
+def fifth_path_topological_structure_vector(M):
+    '''Returns a vector. 
+    '''
+    return M
+
 
