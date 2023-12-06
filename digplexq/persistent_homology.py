@@ -60,16 +60,35 @@ def birth_death_betti(M):
     return bdb
 
 
-def barcode_length(M):
+def barcode_length(M, k=0):
     '''Returns the length of each barcode.
     '''
     L = []
     SM = csr_matrix(M)
-    diag = FlagserPersistence(homology_dimensions=(0,1)).fit_transform([SM]);
-    n = len(diag[0])
+    diagrams = FlagserPersistence(homology_dimensions=(0,1)).fit_transform([SM]);
+    diag = remove_inf(diagrams)
+    
+    n = len(diag)
+    
+    H0 = []
     for i in range(n):
-        l_i = round(abs(diag[0][i][1] - diag[0][i][0]), 5)
-        L.append(l_i)
+        if diag[i][2] == 0:
+            H0.append(diag[i])
+            
+    H1 = []
+    for i in range(n):
+        if diag[i][2] == 1:
+            H1.append(diag[i])
+    
+    if k == 0:
+        for i in range(len(H0)):
+            l_i = round(abs(H0[i][1] - H0[i][0]), 5)
+            L.append(l_i)
+        
+    if k == 1:
+        for i in range(len(H1)):
+            l_i = round(abs(H1[i][1] - H1[i][0]), 5)
+            L.append(l_i)
     
     return L
 
