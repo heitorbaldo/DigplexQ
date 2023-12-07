@@ -181,7 +181,7 @@ def q_density(Hq):
 
 #----- Degree Centrality -----
 
-def in_q_degree(Hq):
+def in_q_degree(Hq, i=None):
     '''Returns the in-q-degree of a q-digraph.
     M: adjacency matrix of the directed q-graph.
     '''
@@ -192,6 +192,10 @@ def in_q_degree(Hq):
 
     if nx.is_empty(Gq) == True:
         return 0
+    
+    if i != None:
+        indeg = Gq.in_degree(i)
+        return indeg  
 
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
@@ -215,7 +219,7 @@ def in_q_degree(Hq):
         return round(Max_in_dc, 4)
 
 
-def out_q_degree(Hq):
+def out_q_degree(Hq, i=None):
     '''Returns the out-q-degree of a q-digraph.
     M: adjacency matrix of the directed q-graph.
     Rerturn:
@@ -227,6 +231,10 @@ def out_q_degree(Hq):
 
     if nx.is_empty(Gq) == True:
         return 0
+    
+    if i != None:
+        outdeg = Gq.out_degree(i)
+        return outdeg  
 
     #If Hq is weakly connected:
     if nx.is_weakly_connected(Gq) == True:
@@ -250,7 +258,7 @@ def out_q_degree(Hq):
         return round(Max_out_dc, 4)
 
 
-def in_q_degree_centrality(Hq):
+def in_q_degree_centrality(Hq, result="nodes"):
     '''Returns the in-q-degree centrality of a q-digraph.
     M: adjacency matrix of the directed q-graph.
     Rerturn:
@@ -263,25 +271,30 @@ def in_q_degree_centrality(Hq):
     if nx.is_empty(Gq) == True:
         return 0
 
-    #If Hq is weakly connected:
-    if nx.is_weakly_connected(Gq) == True:
+    if result == "nodes":
         in_dc = nx.in_degree_centrality(Gq)
-        Max_in_dc = max(dict_to_array(in_dc))
-        return Max_in_dc
+        return in_dc
+    
+    if result == "max":
+        #If Hq is weakly connected:
+        if nx.is_weakly_connected(Gq) == True:
+            in_dc = nx.in_degree_centrality(Gq)
+            Max_in_dc = max(dict_to_array(in_dc))
+            return Max_in_dc
 
-    #If Hq is not weakly connected:
-    else:
-        iDC = []
-        wcc = adjacency_matrices_wcc(Hq)
-        for c in wcc:
-            Sq = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-            in_dc = nx.in_degree_centrality(Sq)
-            iDC.append(max(dict_to_array(in_dc)))
-        Max_in_dc = max(iDC)
-        return round(Max_in_dc, 4)
+        #If Hq is not weakly connected:
+        else:
+            iDC = []
+            wcc = adjacency_matrices_wcc(Hq)
+            for c in wcc:
+                Sq = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
+                in_dc = nx.in_degree_centrality(Sq)
+                iDC.append(max(dict_to_array(in_dc)))
+            Max_in_dc = max(iDC)
+            return round(Max_in_dc, 4)
 
 
-def out_q_degree_centrality(Hq):
+def out_q_degree_centrality(Hq, result="nodes"):
     '''Returns the out-q-degree centrality of a q-digraph.
     M: adjacency matrix of the directed q-graph.
     Rerturn:
@@ -294,22 +307,27 @@ def out_q_degree_centrality(Hq):
     if nx.is_empty(Gq) == True:
         return 0
 
-    #If Hq is weakly connected:
-    if nx.is_weakly_connected(Gq) == True:
+    if result == "nodes":
         out_dc = nx.out_degree_centrality(Gq)
-        Max_out_dc = max(dict_to_array(out_dc))
-        return Max_out_dc
+        return out_dc
+    
+    if result == "max":
+        #If Hq is weakly connected:
+        if nx.is_weakly_connected(Gq) == True:
+            out_dc = nx.out_degree_centrality(Gq)
+            Max_out_dc = max(dict_to_array(out_dc))
+            return Max_out_dc
 
-    #If Hq is not weakly connected:
-    else:
-        oDC = []
-        wcc = adjacency_matrices_wcc(Hq)
-        for c in wcc:
-            Sq = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-            out_dc = nx.out_degree_centrality(Sq)
-            oDC.append(max(dict_to_array(out_dc)))
-        Max_out_dc = max(oDC)
-        return round(Max_out_dc, 4)
+        #If Hq is not weakly connected:
+        else:
+            oDC = []
+            wcc = adjacency_matrices_wcc(Hq)
+            for c in wcc:
+                Sq = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
+                out_dc = nx.out_degree_centrality(Sq)
+                oDC.append(max(dict_to_array(out_dc)))
+            Max_out_dc = max(oDC)
+            return round(Max_out_dc, 4)
 
 
 def upper_q_degree_centrality(M, sigma):
