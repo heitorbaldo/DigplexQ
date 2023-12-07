@@ -16,7 +16,7 @@ __all__ = [
     "q_energy",
     "q_spectral_density",
     "q_spectral_entropy",
-    "q_von_Neuman_entropy",
+    "q_vonNeuman_entropy",
     "q_KL_divergence",
     "q_spectral_distance",
     "q_eigenvector_centrality",
@@ -29,26 +29,30 @@ def hodge_q_laplacian(MaxSimp, q):
     Parameters
     ---------
     MaxSimp: (array) maximal simplices.
-    q: (integer)
+    q: (integer).
     Notes
     -----
-    Based on the packege hodgelaplacians ().
+    Based on the package hodgelaplacians.
     '''
-    if q > len(MaxSimp):
+
+    n = len(MaxSimp)
+    maxdim = len(MaxSimp[n-1][0])
+
+    if q >= maxdim-1:
         return np.array([[0]])
-    
-    MaxSimp_conn = connect_array(MaxSimp)
-    hl = HodgeLaplacians(MaxSimp_conn)
-    Lq = hl.getHodgeLaplacian(q)
-    Lq_arr = Lq.toarray()
-    return Lq_arr
+    else:
+        MaxSimp_conn = connect_array(MaxSimp)
+        hl = HodgeLaplacians(MaxSimp_conn)
+        Lq = hl.getHodgeLaplacian(q)
+        Lq_arr = Lq.toarray()
+        return Lq_arr
 
 
 def q_energy(Hq):
     '''Returns the q-energy of a digraph.
     Parameters
     ----------
-    Hq: q-adjacency matrix.
+    Hq: (array) q-adjacency matrix.
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
@@ -57,13 +61,13 @@ def q_energy(Hq):
 
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     Bq = to_binary(Hq)
     BqtBq = np.matmul(Bq.transpose(), Bq)
     sqrt_BqtBq = sqrtm(BqtBq)
     Eq = np.trace(sqrt_BqtBq)
     real_Eq = np.real(Eq)
-    
+
     return round(real_Eq, 5)
 
 
@@ -71,8 +75,11 @@ def q_spectral_density(L, b=1):
     '''Returns the q-spectral density of a (di)graph.
     Parameters
     ----------
-    L: Hodge n-Laplacian.
+    L: (array) Hodge q-Laplacian.
     '''
+    if np.all(L==0) == True:
+        return 0
+
     Exp = expm(-b*L)
     rho = (Exp)/np.trace(Exp)
     return rho
@@ -82,30 +89,36 @@ def q_spectral_entropy(L):
     '''Returns the q-spectral entropy of a (di)graph.
     Parameters
     ---------
-    L: Hodge q-Laplacian.
+    L: (array) Hodge q-Laplacian.
     '''
+    if np.all(L==0) == True:
+        return 0
+
     EigenVal = np.linalg.eig(L)[0]
-    
+
     EVN = []
     for lambda_i in EigenVal:
         EVN.append(round(lambda_i/sum(EigenVal), 6))
-    
+
     H = 0
     for mu_i in EVN:
         if mu_i != 0:
             H += mu_i*math.log2(mu_i)
-    
-    Hq = np.real(H)
+
+    Hq = -np.real(H)
     return round(Hq, 5)
 
 
-def q_von_Neuman_entropy(L, b=1):
+def q_vonNeuman_entropy(L, b=1):
     '''Returns the q-von-Neuman entropy of a (di)graph.
     Parameters
     ---------
-    L: Hodge n-Laplacian.
-    b: parameter
+    L: (array) Hodge q-Laplacian.
+    b: parameter.
     '''
+    if np.all(L==0) == True:
+        return 0
+
     rho = q_spectral_density(L, b)
     S = -np.trace(rho*logm(rho))
     return round(S, 5)
@@ -115,8 +128,8 @@ def q_KL_divergence(L1, L2, b=1):
     '''Returns the q-Kullback-Liebler divergence.
     Parameters
     ---------
-    L1: Hodge n-Laplacian.
-    L2: Hodge n-Laplacian.
+    L1: (array) Hodge q-Laplacian.
+    L2: (array) Hodge q-Laplacian.
     ---------
     '''
     rho1 = q_spectral_density(L1, b)
@@ -134,7 +147,7 @@ def q_spectral_distance(L1, L2):
     '''
     Smin = []
     Smax = []
-    
+
     Eigen1 = np.linalg.eig(L1)[0]
     Eigen2 = np.linalg.eig(L2)[0]
     Len1 = len(Eigen1)
@@ -150,8 +163,8 @@ def q_spectral_distance(L1, L2):
             Smax.append(abs(Eigen2[k]))
     S = sum(Smin) + sum(Smax)
     N = sum(Eigen1) + sum(Eigen2)
-    
-    dist = S/N 
+
+    dist = S/N
     return round(np.real(dist), 5)
 
 
@@ -159,39 +172,36 @@ def q_eigenvector_centrality(Hq, weight=None):
     '''Returns the q-eigenvector centrality of a digraph.
     Parameters
     ---------
-    Hq: q-adjacency matrix.
+    Hq: (array) q-adjacency matrix.
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     ec = nx.eigenvector_centrality_numpy(Gq, weight=weight, max_iter=100, tol=0)
     Max_ec = max(dict_to_array(ec))
     return round(Max_ec, 5)
-    
+
 
 def q_pagerank_centrality(Hq):
     '''Returns the maximum value of the pagerank centrality.
     Parameters
     ---------
-    Hq: q-adjacency matrix.
-    Rerturn: 
+    Hq: (array) q-adjacency matrix.
+    Rerturn:
     '''
     if isinstance(Hq, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
-        
+
     Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
-    
+
     if nx.is_empty(Gq) == True:
         return 0
-    
+
     prc = nx.pagerank(Gq, alpha=0.85, personalization=None, max_iter=100, tol=1e-06, nstart=None, weight='weight', dangling=None)
     Max_prc = max(dict_to_array(prc))
     return round(Max_prc, 5)
-
-    
-    
