@@ -24,7 +24,7 @@ __all__ = [
     "out_q_degree",
     "in_q_degree_centrality",
     "out_q_degree_centrality",
-    "upper_q_degree_centrality",
+    "upper_in_q_degree_centrality",
     "q_closeness_centrality",
     "q_harmonic_centrality",
     "q_betweenness_centrality",
