@@ -192,11 +192,11 @@ def histogram_cosine_kernel(M1, M2):
     X = DirectedFlagComplex(M1, split='by_dimension_without_nodes')
     Y = DirectedFlagComplex(M2, split='by_dimension_without_nodes')
     
-    v1 = f_count(X, Y, i=1)
-    v2 = f_count(X, Y, i=2)
+    #v1 = f_count(X, Y, i=1)
+    #v2 = f_count(X, Y, i=2)
     
-    #v1 = first_flag_topological_structure_vector(X)
-    #v2 = first_flag_topological_structure_vector(Y)
+    v1 = first_flag_topological_structure_vector(X)
+    v2 = first_flag_topological_structure_vector(Y)
     
     if len(v1) != len(v2):
         diff = abs(len(v1)-len(v2))
@@ -232,23 +232,24 @@ def jaccard_kernel(M1, M2):
     if np.all(M1==0) == True or np.all(M2==0) == True:
         return 1.0
     
-    X = DirectedFlagComplex(M1, split='by_dimension_without_nodes')
-    Y = DirectedFlagComplex(M2, split='by_dimension_without_nodes')
-    
-    Union = []
+    X = DirectedFlagComplex(M1, split='none_without_nodes')
+    Y = DirectedFlagComplex(M2, split='none_without_nodes')
+        
+    Diff = []
     Inter = []
     
     n1 = len(X)
     n2 = len(Y)
-    n = min(n1, n2)
-    m = max(n1, n2)
     
-    for k in range(m):
-        Union += union_k(X, Y, k)
+    for simplex in Y:
+        if simplex not in X:
+            Diff.append(simplex)
     
-    for k in range(n):
-        Inter += intersection_k(X, Y, k)
+    for simplex in Y:
+        if simplex in X:
+            Inter.append(simplex)
     
+    Union = X + Diff
     J = 1 - len(Inter)/len(Union)
     return round(J, 5)
 
