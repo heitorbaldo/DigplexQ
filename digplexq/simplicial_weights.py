@@ -1,5 +1,5 @@
 '''
-Node weights / simplex weights / path weights
+Node weights, simplex weights, path weights.
 '''
 
 import numpy as np
@@ -15,9 +15,10 @@ __all__ = [
     
 def node_weights_max(M):
     '''Returns the node weights W(i) = max(W_max, W_diff).
+    
     Parameters
-    -------
-    M: NumPy matrix
+    ----------
+    M: (array) adjacency matrix.
     '''
     W_diff = []
     W_max = []
@@ -46,11 +47,8 @@ def node_weights_max_in_out(M):
     '''Returns the node weights W(i) = max(w_out_deg(i), w_in_deg(i)).
     
     Parameters
-    -------
-    M: (NumPy matrix) adjacency matrix.
-    Returns
-    -------
-    W_max: (NumPy array)
+    ----------
+    M: (array) adjacency matrix.
     '''
     if np.all(M==0) == True:
         return 0
@@ -76,10 +74,10 @@ def node_weights_simplex(M, simplex, weight_func='max'):
     '''Returns the weights of the nodes that belong to the simplex.
     
     Parameters
-    ---------
-    M: NumPy matrix
-    simplex: NumPy array
-    weight: edge-weight to node-weight transformation.
+    ----------
+    M: (array) adjacency matrix.
+    simplex: (array) simplex.
+    weight_func: edge-to-node weight function.
     '''
     if np.all(M==0) == True:
         return 0
@@ -98,11 +96,12 @@ def node_weights_simplex(M, simplex, weight_func='max'):
 
 def simplex_weight(M, simplex, weight_func='max_in_out'):
     '''Returns the multiplication of all the weights of the nodes that belong to the simplex.
+    
     Parameters
-    ---------
-    M: NumPy matrix
-    simplex: NumPy array
-    weight: edge-weight to node-weight transformation.
+    ----------
+    M: (array) adjacency matrix.
+    simplex: (array) simplex.
+    weight_func: edge-to-node weight function.
     '''
     if simplex == []:
         return 0

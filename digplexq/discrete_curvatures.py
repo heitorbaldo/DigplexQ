@@ -1,5 +1,6 @@
 '''
 Discrete Curvatures: Ollivier-Ricci and Forman-Ricci Curvatures.
+TODO: Ollivier-Ricci Curvature.
 '''
 
 import math
