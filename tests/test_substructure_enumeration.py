@@ -10,7 +10,7 @@ from digplexq.directed_q_analysis import *
 from digplexq.substructures_enumeration import *
 
 
-#---------
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 A1 = np.matrix([[0, 0, 0], [1, 0, 0], [1, 1, 0]]) #contains a 2-clique
 A2 = np.matrix([[0, 0, 1], [1, 0, 1], [0, 0, 0]]) #contains a 2-clique
@@ -31,7 +31,7 @@ D1 = np.matrix([[0, 1, 1, 0], [0, 0, 0, 1], [0, 0, 0, 1], [0, 0, 0, 0]]) #contai
 D2 = np.matrix([[0, 0, 0, 0], [1, 0, 0, 1], [1, 0, 0, 1], [0, 0, 0, 0]]) #does not contain a directed square
 
 
-#--------------
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class TestCountDirectedCliques(unittest.TestCase):
     
