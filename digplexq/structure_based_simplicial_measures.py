@@ -23,7 +23,6 @@ __all__ = [
     "out_q_degree",
     "in_q_degree_centrality",
     "out_q_degree_centrality",
-    "upper_in_q_degree_centrality",
     "q_closeness_centrality",
     "q_harmonic_centrality",
     "q_betweenness_centrality",
@@ -332,19 +331,7 @@ def out_q_degree(A, i=None, q=None):
         return round(Max_out_dc, 4)
 
 
-def upper_in_q_degree_centrality(M, sigma=None):
-    '''Returns the upper-in-q-degree of a directed simplex.
-    Parameters
-    ----------
-    M: (array) adjacency matrix.
-    sigma: (array) simplex.
-    '''
-    CinDeg = (2**q)/(math.comb(f-(q+1), q+h))
-    return CinDeg
-
-
-
-
+    
 #----- Measures of Centrality -----
     
 def in_q_degree_centrality(A, q=None, results="nodes"):
