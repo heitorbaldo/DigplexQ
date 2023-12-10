@@ -1,4 +1,7 @@
-
 matplotlib>=2.2
-networkx>=2.5
 numpy>=1.19
+scipy>=1.11.3
+networkx>=2.5
+gtda>=0.6.0
+persim>=0.3.1
+hodgelaplacians>=0.1
