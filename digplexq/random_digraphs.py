@@ -1,5 +1,5 @@
 '''
-Random Digraph Models
+Random digraph models.
 '''
 
 import numpy as np
@@ -10,8 +10,6 @@ from random import choice, seed
 from math import comb
 from digplexq.utils import *
 
-
-#-------------------
 
 
 __all__ = [
@@ -53,13 +51,18 @@ def random_weights(M):
 #----- k-Regular Random Model -----
 
 def directed_kregular_model(n, k, weight=False):
-    """Returns a weighted k-Regular random digraph.
-    Parameters:
+    """Returns a k-regular random digraph.
+    
+    Parameters
     ----------
-    n : Number of nodes (integer). 
-    k : Number of in- and out- degree (integer).
-    Notes:
-    Havel-Hakimi Algorithm
+    n : (integer) Number of nodes. 
+    k : (integer) Number of in- and out- degree.
+    weight: (boolean) If True, it randomly assigns weights to edges.
+    
+    Notes
+    -----
+    Based on the Havel-Hakimi algorithm, implemented in the
+    Networkx's function "directed_havel_hakimi_graph()".
     """
     r = tuple([k]*n)
     H = nx.directed_havel_hakimi_graph(r,r)
@@ -76,11 +79,12 @@ def directed_kregular_model(n, k, weight=False):
 #----- Erdős–Rényi-Gilbert Random Model (G(n, p)) -----
 
 def directed_erdos_renyi_Gnp_model(n, p, weight=False):
-    """Returns a weighted binomial random digraph.
+    """Returns a binomial random digraph.
     Parameters:
     ----------
-    n : Number of nodes (integer).    
-    p : Probability of add a directed edge (i,j).
+    n : (integer) Number of nodes. 
+    p : (float) Probability of add a directed edge (i,j).
+    weight: (boolean) If True, it randomly assigns weights to edges.
     """
     A = np.zeros((n,n))  #null matrix (no connections).           
     for i in range(n):
@@ -99,11 +103,13 @@ def directed_erdos_renyi_Gnp_model(n, p, weight=False):
 #----- Erdős–Rényi Random Model (G(n, M)) -----
 
 def directed_erdos_renyi_GnM_model(n, M, weight=False):
-    """Returns a weighted Erdős–Rényi random digraph.
-    Parameters:
+    """Returns an Erdős–Rényi random digraph.
+    
+    Parameters
     ----------
-    n : Number of nodes (integer).   
-    M : Number of edges (i,j).
+    n : (integer) Number of nodes (integer).   
+    M : (integer) Number of edges (i,j).
+    weight: (boolean) If True, it randomly assigns weights to edges.
     """
     if M > comb(n, 2)*2:
         print("Error. M must be <= comb(n, 2)*2.")
@@ -133,16 +139,19 @@ def directed_erdos_renyi_GnM_model(n, M, weight=False):
 
 def directed_watts_strogatz_model(n, k, p):
     """Returns a Watts–Strogatz small-world digraph.
-    Parameters:
+    
+    Parameters
     ----------
-    n : Number of nodes (integer).    
-    k : Number of nearest neighbors (integer).
-    p : Probability of rewiring each edge (float).
+    n : (integer) Number of nodes (integer).    
+    k : (integer) Number of nearest neighbors (integer).
+    p : (float) Probability of rewiring each edge (float).
     
     The directions of the edges in the initial ring are arranged in
     a counter-clockwise manner.
     
-    Note: This code is a direct modification of the Watts–Strogatz Model
+    Notes
+    -----
+    This code is a direct modification of the Watts–Strogatz model
     implemented in Networkx.
         """
     if k > n:
@@ -176,10 +185,12 @@ def directed_watts_strogatz_model(n, k, p):
 
 def weighted_directed_watts_strogatz_model(n, k, p):
     """Returns a weighted Watts–Strogatz small-world digraph.
-    Parameters:
-    n : Number of nodes (integer);     
-    k : Number of nearest neighbors (integer);
-    p : Probability of rewiring each edge (float).
+    
+    Parameters
+    ----------
+    n : (integer) Number of nodes (integer);     
+    k : (integer) Number of nearest neighbors (integer);
+    p : (float) Probability of rewiring each edge (float).
     """
     W = directed_watts_strogatz_model(n, k, p)
     for i in range(n):
@@ -198,6 +209,7 @@ def weighted_directed_watts_strogatz_model(n, k, p):
 
 def directed_barabasi_albert_model(n, alpha, beta, gamma, delta_in, delta_out, weight=False):
     """Returns a weighted Barabási-Albert digraph (see [1]).
+    
     Parameters (see [2]):
     ----------
     n : Number of nodes (integer);     
@@ -211,8 +223,10 @@ def directed_barabasi_albert_model(n, alpha, beta, gamma, delta_in, delta_out, w
             chosen randomly according to the out-degree distribution (float).
     delta_in : Bias for choosing nodes from in-degree distribution (float).
     delta_out : Bias for choosing nodes from out-degree distribution (float).
-    --------
-    References:
+    weight: (boolean) If True, it randomly assigns weights to edges.
+    
+    References
+    ----------
     [1] B. Bollobás, C. Borgs, J. Chayes, and O. Riordan, Directed scale-free graphs, Proceedings of the fourteenth 
     annual ACM-SIAMSymposium on Discrete Algorithms, 132–139, 2003.
     [2] https://networkx.org/documentation/stable/reference/generated/networkx.generators.directed.scale_free_graph.html
@@ -238,9 +252,9 @@ def directed_barabasi_albert_model(n, alpha, beta, gamma, delta_in, delta_out, w
 
 #----- Maslov-Sneppen Rewiring and Lattice Rewiring -----
     
-
 def maslov_sneppen_rewiring(M):
-    '''Returns a rewired random digraph.
+    '''Returns the adjacency matrix of a randomly rewired digraph.
+    
     Parameters
     ----------
     M: (array) Adjacency matrix.
@@ -256,7 +270,8 @@ def maslov_sneppen_rewiring(M):
 
 
 def lattice_rewiring(M):
-    '''Returns a rewired random digraph.
+    '''Returns the adjacency matrix of a randomly rewired digraph.
+    
     Parameters
     ----------
     M: (array) Adjacency matrix.
@@ -276,7 +291,8 @@ def lattice_rewiring(M):
 
 
 def random_2_clique_model(n, d):
-    '''Returns a random digraph.
+    '''Returns the adjacency matrix of a random digraph.
+    
     Parameters
     ----------
     n: (integer) Number of nodes.
@@ -297,7 +313,8 @@ def random_2_clique_model(n, d):
 
 
 def random_3_clique_model(n, d):
-    '''Returns a random digraph.
+    '''Returns the adjacency matrix of a random digraph.
+    
     Parameters
     ----------
     n: (integer) Number of nodes.
@@ -321,10 +338,11 @@ def random_3_clique_model(n, d):
 #------------ Dynamic Random Digraph Model -------------
 
 def include_exclude_edges(L, p1, p2):
-    '''
+    '''Returns an adjacency matrix with some different edges.
+    
     Parameters
     ----------
-    L: The underlying adjacent matrix
+    L: The underlying adjacency matrix.
     p1: probability that edge (i,j) exists at time t.
     p2: probability that a non-existent edge (i,j) arises at time t.
     '''
@@ -339,7 +357,9 @@ def include_exclude_edges(L, p1, p2):
 
 def dynamic_random_digraph_model(M, p1, p2, t):
     '''Returns a weighted dynamic random digraph.
-    Parameters:
+    
+    Parameters
+    ----------
     L: The underlying adjacent matrix
     p1: probability that edge (i,j) exists at time t.
     p2: probability that a non-existent edge (i,j) arises at time t.
@@ -359,6 +379,7 @@ def dynamic_random_digraph_model(M, p1, p2, t):
     
 def MonteCarloSimulation(num_simulations, digraph_model, n, weight=None):
     '''Returns an array of random matrices.
+    
     Parameters
     ----------
     num_simulations: (integer) number of digraphs.

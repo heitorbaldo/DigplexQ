@@ -23,7 +23,6 @@ __all_ = [
     "count_elmentary_directed_quasi_cliques",
     "count_double_edges",
     "count_directed_n_cycles",
-    "zscore_motif",
     "first_flag_topological_structure_vector",
     "second_flag_topological_structure_vector",
     "third_flag_topological_structure_vector",
@@ -367,11 +366,6 @@ def count_directed_n_cycles(A, q=None):
     Qtd = len(enumerate_directed_n_cycles(A, q))
     return Qtd   
 
-
-def zscore_motif(M):
-    '''Returns all 
-    '''
-    return M
 
 
 #------------------------------
