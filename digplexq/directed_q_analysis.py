@@ -13,24 +13,32 @@ from digplexq.simplicial_weights import *
 from digplexq.digraph_based_complexes import *
 #from digplexq.auxiliaxy_functions import *
 
-#__all__ = [
-#    "k_faces",
-#    "face_maps",
-#]
+__all__ = [
+    "k_faces",
+    "face_maps",
+    "q_i_j_connectivity",
+    "is_in_q_near",
+    "is_out_q_near",
+    "ComplementElements",
+    "MaximalSimplices",
+    "q_index",
+    "q_adjacency_matrix",
+    "weighted_q_adjacency_matrix",
+    "adjacency_matrices_wcc",
+    "fast_q_adjacency_matrix",
+]
 
 
 #----- Face maps -----
 
 def k_faces(DFC, simplex, k):
     '''Returns all the k-faces of a given simplex.
+    
     Parameters
-    -------
+    ----------
     DFC: DirectedFlagComplex(M, "by_dimension_with_nodes")
-    simplex:
-    k: integer
-       Dimension of the k-faces.
-    Returns
-    -------
+    simplex: (array) simplex.
+    k: (integer) Dimension of the k-faces.
     '''
     if len(simplex)-1 <= k:
         raise ValueError("k must be less than the dimension of the simplex.")
@@ -44,9 +52,10 @@ def k_faces(DFC, simplex, k):
 
 def face_maps(DFC, simplex, k):
     '''Returns the indices and the faces.
+    
     Parameters
     -------
-    DFC: DirectedFlagComplex(M, "by_dimension_with_nodes")
+    DFC: DirectedFlagComplex.
     '''
     ordered_faces = []
     Faces = k_faces(DFC, simplex, k)
@@ -67,8 +76,10 @@ def face_maps(DFC, simplex, k):
 
 def q_i_j_connectivity(DFC, simplex1, simplex2):
     '''Returns the (q,i,j)-connectivity.
+    
     Parameters
-    -------
+    ----------
+    DFC: DirectedFlagComplex.
     '''
     k1 = len(simplex1)-2
     k2 = len(simplex2)-2
@@ -100,8 +111,8 @@ def is_in_q_near(DFC_nodes, q, simplex1, simplex2):
     '''Returns True if simplex1 is in-q-near to simplex2.
     Parameters
     -------
-    DFC_nodes: NumPy array
-    q: integer
+    DFC_nodes: (array) DirectedFlagComplex.
+    q: (integer)
     '''
     q_i_j = q_i_j_connectivity(DFC_nodes, simplex1, simplex2)
     
@@ -122,10 +133,11 @@ def is_in_q_near(DFC_nodes, q, simplex1, simplex2):
 
 def is_out_q_near(DFC_nodes, q, simplex1, simplex2):
     '''Returns True if simplex1 is out-q-near to simplex2.
+    
     Parameters
-    -------    
+    ----------   
     DFC_nodes: NumPy array
-    q: integer
+    q: (integer)
     '''
     q_i_j = q_i_j_connectivity(DFC_nodes, simplex1, simplex2)
     
@@ -199,6 +211,7 @@ def MaximalSimplices(DFC):
 
 def q_index(MaxSimp, q):
     '''Returns the index associated to q.
+    
     Parameters
     ---------
     MaxSimp: (NumPy array) maximal simplices.
@@ -224,6 +237,7 @@ def q_index(MaxSimp, q):
 
 def q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
     '''Returns the q-adjacency matrix of a DFC.
+    
     Parameters
     -------
     DFC = directed flag complex.
@@ -260,10 +274,7 @@ def q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
     return Hq
     
     
-    
-    
-#----- Weighted Directed q-Graph -----     
-
+       
 def weighted_q_adjacency_matrix(M, DFC_dim_none, DFC_dim_nodes, q):
     '''Returns the weighted q-adjacency matrix of a DFC.
     DFC = directed flag complex.
@@ -299,78 +310,37 @@ def weighted_q_adjacency_matrix(M, DFC_dim_none, DFC_dim_nodes, q):
         Hq = normalize(Hq, axis=1, norm='max')  #Row-normalized matrix w.r.t. the maximum norm.
     
     return Hq
-    
-
 
     
-#----- Weakly and Strongly q-Connected Components -----
-   
-def adjacency_matrices_wcc(M):
+    
+def adjacency_matrices_wcc(A):
     '''Returns the adjacency matrices of the weakly connected components.
-    M: adjacency matrix.
-    Returns
+    
+    Parameters
+    ----------
+    A: (array) Adjacency matrix.
     '''
-    if isinstance(M, np.ndarray) == False:
+    if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a square matrix.")
     
     WCC = []
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
     wcc = list(nx.weakly_connected_components(G))
     for c in wcc:
         S = G.subgraph(c)
-        A = nx.adjacency_matrix(S)
         WCC.append(nx.adjacency_matrix(S).toarray())
     return WCC
       
+    
 
+def fast_q_adjacency_matrix(M, q):
+    '''Returns the q-adjacency matrix.
+    '''
+    DFC_dim_nodes = DirectedFlagComplex(M, "by_dimension_with_nodes")
+    DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+    Hq = q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q)
+    return Hq
 
-#----- Lower Degrees -----
-
-def LowerDeg(M, q, p, a):
-    Ldeg = len(lower_adj(M, q, p, a))
-    return Ldeg
-
-def LowerInDeg(M, q, p, a):
-    LIndeg = len(directed_lower_adj(M, q, p, a))
-    return LIndeg
-
-
-#----- Upper Degrees -----
-
-
-
-#----- q-Stars -----
-
-def in_qk_star(M, s, q, k):
-    W=[]
-    Q = self.in_q_star(M, s, q)
-    if k == 1:
-        for i in range(len(Q)):
-            if len(Q[i]) == k:
-                W.append(Q[i]) 
-    elif k == 2:
-         for i in range(len(Q)):
-            if len(Q[i]) == k:
-                W.append(Q[i])              
-    else:
-        print("k must be between 1 and 4.")
-    return W
-
-
-def out_qk_star(M, s, q, k):
-    W=[]
-    Q = self.out_q_star(M, s, q)
-    if k == 1:
-        for i in range(len(Q)):
-            if len(Q[i]) == k:
-                W.append(Q[i]) 
-    elif k == 2:
-        for i in range(len(Q)):
-            if len(Q[i]) == k:
-                W.append(Q[i])              
-    else:
-        print("k must be between 1 and 4.")
-    return W
 
 
 

@@ -41,8 +41,14 @@ def remove_inf(diag):
 
 
 def persistence_diagram(M):
-    '''Returns the persistence diagram.
-    M: (array)
+    '''Returns the persistence diagram of a digraph.
+    
+    Parameters
+    ----------
+    M: (array) Adjacency matrix.
+    
+    Notes
+    -----
     Based on Flagser.
     '''
     SM = csr_matrix(M)
@@ -52,8 +58,10 @@ def persistence_diagram(M):
 
 def birth_death_betti(M):
     '''Returns the triple [birth, death, dimension].
-    M: (array)
-    Based on Flagser.
+    
+    Parameters
+    ----------
+    M: (array) Adjacency matrix.
     '''
     SM = csr_matrix(M)
     bdb = FlagserPersistence(homology_dimensions=(0,1)).fit_transform([SM]);
@@ -62,8 +70,11 @@ def birth_death_betti(M):
 
 def barcode_length(M, k=0):
     '''Returns the length of each barcode.
-    '''
     
+    Parameters
+    ----------
+    M: (array) Adjacency matrix.
+    '''
     if np.all(M==0) == True:
         return 0
     
@@ -99,9 +110,11 @@ def barcode_length(M, k=0):
 
 def betti_numbers(M, k=0):
     '''Returns the k-th Betti numbers associated with the filtration.
-    M: adjacency matrix.
-    '''
     
+    Parameters
+    ----------
+    M: (array) Adjacency matrix.
+    '''
     if np.all(M==0) == True:
         return 0
     
@@ -120,6 +133,7 @@ def betti_numbers(M, k=0):
 
 def wasserstein_distance(M1, M2):
     '''Returns the Wasserstein distance between two digraphs.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -135,6 +149,7 @@ def wasserstein_distance(M1, M2):
 
 def bottleneck_distance(M1, M2):
     '''Returns the bottleneck distance.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -150,6 +165,7 @@ def bottleneck_distance(M1, M2):
 
 def betti_distance(M1, M2):
     '''Returns the L2 distance between two Betti curves.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -174,6 +190,7 @@ def betti_distance(M1, M2):
 
 def landscape_distance(M1, M2):
     '''Returns the L2 distance between two persistence landscapes.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -198,6 +215,7 @@ def landscape_distance(M1, M2):
     
 def silhouette_distance(M1, M2):
     '''Returns the L2 distance between two silhouettes.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -222,6 +240,7 @@ def silhouette_distance(M1, M2):
     
 def persistence_image_distance(M1, M2):
     '''Returns the L2 distance between two Gaussian-smoothed diagrams.
+    
     Parameters
     ----------
     M1: adjacency matrix.

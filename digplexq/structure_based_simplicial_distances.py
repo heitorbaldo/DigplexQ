@@ -27,6 +27,7 @@ __all_ = [
 
 def first_topological_distance(M1, M2, comp="flag"):
     '''Returns the 1st topological distance.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -66,6 +67,7 @@ def first_topological_distance(M1, M2, comp="flag"):
 
 def second_topological_distance(M1, M2, comp="flag"):
     '''Returns the 2nd topological distance.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -106,6 +108,7 @@ def second_topological_distance(M1, M2, comp="flag"):
 
 def fourth_topological_distance(M1, M2, comp="flag"):
     '''Returns the 4th topological distance.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -141,6 +144,7 @@ def fourth_topological_distance(M1, M2, comp="flag"):
 
 def fifth_topological_distance(M1, M2, comp="flag"):
     '''Returns the 5th topological distance.
+    
     Parameters
     ----------
     M1: adjacency matrix.
@@ -177,15 +181,14 @@ def fifth_topological_distance(M1, M2, comp="flag"):
 
 #----- Simplicial Kernels -----
 
-
 def histogram_cosine_kernel(M1, M2):
-    '''Returns the histogram cosine kernel (HCK).
+    '''Returns the histogram cosine kernel (HCK) between two directed flag complexes.
+    
     Parameters
     ----------
-    X: (array) simplicial complex.
-    Y: (array) simplicial complex.
-    '''
-    
+    M1: adjacency matrix.
+    M2: adjacency matrix.
+    '''  
     if np.all(M1==0) == True or np.all(M2==0) == True:
         return 1.0
     
@@ -222,13 +225,13 @@ def histogram_cosine_kernel(M1, M2):
 
 
 def jaccard_kernel(M1, M2):
-    '''Returns the Jaccard kernel between X and Y.
-   Parameters
-    ----------
-    X: (array) simplicial complex.
-    Y: (array) simplicial complex.
-    '''
+    '''Returns the Jaccard kernel between two directed flag complexes.
     
+    Parameters
+    ----------
+    M1: adjacency matrix.
+    M2: adjacency matrix.
+    '''
     if np.all(M1==0) == True or np.all(M2==0) == True:
         return 1.0
     

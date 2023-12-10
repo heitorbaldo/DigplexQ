@@ -13,7 +13,6 @@ __all__ = [
 ]
         
     
-#Computing node weights:
 def node_weights_max(M):
     '''Returns the node weights W(i) = max(W_max, W_diff).
     Parameters
@@ -45,6 +44,7 @@ def node_weights_max(M):
 
 def node_weights_max_in_out(M):
     '''Returns the node weights W(i) = max(w_out_deg(i), w_in_deg(i)).
+    
     Parameters
     -------
     M: (NumPy matrix) adjacency matrix.
@@ -72,9 +72,9 @@ def node_weights_max_in_out(M):
     return  W_max
 
 
-#Compute the weight of a n-simplex:
 def node_weights_simplex(M, simplex, weight_func='max'):
     '''Returns the weights of the nodes that belong to the simplex.
+    
     Parameters
     ---------
     M: NumPy matrix
@@ -96,7 +96,6 @@ def node_weights_simplex(M, simplex, weight_func='max'):
         return  w_in_out
 
 
-#Compute the weight of a n-simplex:
 def simplex_weight(M, simplex, weight_func='max_in_out'):
     '''Returns the multiplication of all the weights of the nodes that belong to the simplex.
     Parameters

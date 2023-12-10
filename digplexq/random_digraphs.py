@@ -199,6 +199,7 @@ def weighted_directed_watts_strogatz_model(n, k, p):
 def directed_barabasi_albert_model(n, alpha, beta, gamma, delta_in, delta_out, weight=False):
     """Returns a weighted Barabási-Albert digraph (see [1]).
     Parameters (see [2]):
+    ----------
     n : Number of nodes (integer);     
     alpha : Probability for adding a new node connected to an existing node
             chosen randomly according to the in-degree distribution (float).
@@ -239,10 +240,10 @@ def directed_barabasi_albert_model(n, alpha, beta, gamma, delta_in, delta_out, w
     
 
 def maslov_sneppen_rewiring(M):
-    '''Returns a digraph
+    '''Returns a rewired random digraph.
     Parameters
-    ---------
-    M: matrix
+    ----------
+    M: (array) Adjacency matrix.
     '''
     Dg = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
     Dg_wde = remove_double_edges_rand(Dg)
@@ -255,10 +256,10 @@ def maslov_sneppen_rewiring(M):
 
 
 def lattice_rewiring(M):
-    '''Returns
+    '''Returns a rewired random digraph.
     Parameters
-    ---------
-    M: matrix
+    ----------
+    M: (array) Adjacency matrix.
     '''
     Dg = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
     Dg_wde = remove_double_edges_rand(Dg)
@@ -275,10 +276,11 @@ def lattice_rewiring(M):
 
 
 def random_2_clique_model(n, d):
-    '''
-    Parameters:
+    '''Returns a random digraph.
+    Parameters
+    ----------
     n: (integer) Number of nodes.
-    d: "density" (number of iterations).
+    d: (integer) "density" (number of iterations).
     '''
     M = np.zeros((n, n))
     for l in range(0, int(100*d)):
@@ -295,10 +297,11 @@ def random_2_clique_model(n, d):
 
 
 def random_3_clique_model(n, d):
-    '''
-    Parameters:
-    n: number of nodes.
-    d: "density" (number of iterations).
+    '''Returns a random digraph.
+    Parameters
+    ----------
+    n: (integer) Number of nodes.
+    d: (integer) "density" (number of iterations).
     '''
     M = np.zeros((n, n))
     for m in range(0, int(100*d)):
@@ -317,10 +320,10 @@ def random_3_clique_model(n, d):
 
 #------------ Dynamic Random Digraph Model -------------
 
-
 def include_exclude_edges(L, p1, p2):
     '''
-    Parameters:
+    Parameters
+    ----------
     L: The underlying adjacent matrix
     p1: probability that edge (i,j) exists at time t.
     p2: probability that a non-existent edge (i,j) arises at time t.
@@ -354,10 +357,10 @@ def dynamic_random_digraph_model(M, p1, p2, t):
 
 #------------ Monte Carlo Simulation -------------
     
-def MonteCarloSimulation(num_simulations, digraph_model, n):
+def MonteCarloSimulation(num_simulations, digraph_model, n, weight=None):
     '''Returns an array of random matrices.
     Parameters
-    ---------
+    ----------
     num_simulations: (integer) number of digraphs.
     digraph_model: (string) model.
     n: (integer) number of nodes.
@@ -375,7 +378,7 @@ def MonteCarloSimulation(num_simulations, digraph_model, n):
         for i in range(num_simulations):
             #k-Regular random digraphs:
             k = int(np.random.uniform(1,10))
-            KR = directed_kregular_model(n, k, weight=False)
+            KR = directed_kregular_model(n, k, weight=weight)
             KR = remove_double_edges(KR)
             K.append(k)
             all_kr_digraphs.append(KR)
@@ -384,7 +387,7 @@ def MonteCarloSimulation(num_simulations, digraph_model, n):
     if digraph_model == 'erdos-renyi_Gnp':
         for i in range(num_simulations):
             p = np.random.uniform(0,1)
-            ERp = directed_erdos_renyi_Gnp_model(n, p, weight=False)
+            ERp = directed_erdos_renyi_Gnp_model(n, p, weight=weight)
             ERp = remove_double_edges(ERp)
             all_erp_digraphs.append(ERp)
         return all_erp_digraphs
@@ -393,7 +396,7 @@ def MonteCarloSimulation(num_simulations, digraph_model, n):
         for i in range(num_simulations):
             #Erdos-Renyi random digraphs:
             per = int(np.random.uniform(0,190))
-            ERM = directed_erdos_renyi_GnM_model(n, per, weight=False)
+            ERM = directed_erdos_renyi_GnM_model(n, per, weight=weight)
             ERM = remove_double_edges(ERM)
             Per.append(per)
             all_erM_digraphs.append(ERM)
@@ -404,6 +407,7 @@ def MonteCarloSimulation(num_simulations, digraph_model, n):
             #Watts-Strogatz random digraphs:
             pws = round(np.random.uniform(0,1), 4)
             WS = directed_watts_strogatz_model(n, 10, pws)
+            #WS = weighted_directed_watts_strogatz_model(n, 10, pws)
             WS = remove_double_edges(WS)
             Pws.append(pws)
             all_ws_digraphs.append(WS)
@@ -412,7 +416,7 @@ def MonteCarloSimulation(num_simulations, digraph_model, n):
     if digraph_model == 'barabasi_albert':
         for i in range(num_simulations):
             pba = round(np.random.uniform(0,1), 4)
-            BA = directed_barabasi_albert_model(n, alpha=0.41, beta=0.54, gamma=0.05, delta_in=pba, delta_out=0, weight=False)
+            BA = directed_barabasi_albert_model(n, alpha=0.41, beta=0.54, gamma=0.05, delta_in=pba, delta_out=0, weight=weight)
             BA = remove_double_edges(BA)
             all_ba_digraphs.append(BA)
         return all_ba_digraphs

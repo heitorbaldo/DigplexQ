@@ -1,5 +1,6 @@
 '''
-Spectrum-Based Simplicial Measures
+Spectrum-Based Simplicial Measures.
+Some of the measures implemented here are based on the respective measures from the Networkx library.
 '''
 
 import math
@@ -26,13 +27,15 @@ __all__ = [
 
 def hodge_q_laplacian(MaxSimp, q):
     '''Returns the Hodge q-Laplacian.
+    
     Parameters
     ---------
     MaxSimp: (array) maximal simplices.
-    q: (integer).
+    q: (integer) Level of clique organization of the graph.
+    
     Notes
     -----
-    Based on the package hodgelaplacians.
+    Based on the package "hodgelaplacians" (https://github.com/tsitsvero/hodgelaplacians).
     '''
 
     n = len(MaxSimp)
@@ -48,21 +51,27 @@ def hodge_q_laplacian(MaxSimp, q):
         return Lq_arr
 
 
-def q_energy(Hq):
+def q_energy(A, q=None):
     '''Returns the q-energy of a digraph.
+    
     Parameters
     ----------
-    Hq: (array) q-adjacency matrix.
+    A: (array) Adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
     '''
-    if isinstance(Hq, np.ndarray) == False:
+    if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
-    if nx.is_empty(Gq) == True:
+    if nx.is_empty(G) == True:
         return 0
+    
+    if q != None:
+        A = fast_q_adjacency_matrix(A, q)
+        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
-    Bq = to_binary(Hq)
+    Bq = to_binary(A)
     BqtBq = np.matmul(Bq.transpose(), Bq)
     sqrt_BqtBq = sqrtm(BqtBq)
     Eq = np.trace(sqrt_BqtBq)
@@ -72,10 +81,12 @@ def q_energy(Hq):
 
 
 def q_spectral_density(L, b=1):
-    '''Returns the q-spectral density of a (di)graph.
+    '''Returns the q-spectral density of a digraph.
+    
     Parameters
     ----------
     L: (array) Hodge q-Laplacian.
+    b: (integer) parameter.
     '''
     if np.all(L==0) == True:
         return 0
@@ -86,7 +97,8 @@ def q_spectral_density(L, b=1):
 
 
 def q_spectral_entropy(L):
-    '''Returns the q-spectral entropy of a (di)graph.
+    '''Returns the q-spectral entropy of a digraph.
+    
     Parameters
     ---------
     L: (array) Hodge q-Laplacian.
@@ -110,11 +122,12 @@ def q_spectral_entropy(L):
 
 
 def q_vonNeuman_entropy(L, b=1):
-    '''Returns the q-von-Neuman entropy of a (di)graph.
+    '''Returns the q-von-Neuman entropy of a digraph.
+    
     Parameters
     ---------
     L: (array) Hodge q-Laplacian.
-    b: parameter.
+    b: (integer) parameter.
     '''
     if np.all(L==0) == True:
         return 0
@@ -125,12 +138,13 @@ def q_vonNeuman_entropy(L, b=1):
 
 
 def q_KL_divergence(L1, L2, b=1):
-    '''Returns the q-Kullback-Liebler divergence.
+    '''Returns the q-Kullback-Liebler divergence betweenn two 
+    Hodge q-Laplacians.
+    
     Parameters
     ---------
     L1: (array) Hodge q-Laplacian.
     L2: (array) Hodge q-Laplacian.
-    ---------
     '''
     rho1 = q_spectral_density(L1, b)
     rho2 = q_spectral_density(L2, b)
@@ -139,7 +153,8 @@ def q_KL_divergence(L1, L2, b=1):
 
 
 def q_spectral_distance(L1, L2):
-    '''Returns the q-spectral distance between two (di)graphs.
+    '''Returns the q-spectral distance between two Hodge q-Laplacians.
+    
     Parameters
     ---------
     L1: Hodge q-Laplacian.
@@ -168,40 +183,51 @@ def q_spectral_distance(L1, L2):
     return round(np.real(dist), 5)
 
 
-def q_eigenvector_centrality(Hq, weight=None):
+def q_eigenvector_centrality(A, q=None):
     '''Returns the q-eigenvector centrality of a digraph.
+    
     Parameters
     ---------
-    Hq: (array) q-adjacency matrix.
+    A: (array) q-adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
     '''
-    if isinstance(Hq, np.ndarray) == False:
+    if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
-    if nx.is_empty(Gq) == True:
+    if nx.is_empty(G) == True:
         return 0
+    
+    if q != None:
+        A = fast_q_adjacency_matrix(A, q)
+        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
-    ec = nx.eigenvector_centrality_numpy(Gq, weight=weight, max_iter=100, tol=0)
+    ec = nx.eigenvector_centrality_numpy(G, weight=None, max_iter=100, tol=0)
     Max_ec = max(dict_to_array(ec))
     return round(Max_ec, 5)
 
 
-def q_pagerank_centrality(Hq):
-    '''Returns the maximum value of the pagerank centrality.
+def q_pagerank_centrality(A, q=None):
+    '''Returns the q-pagerank centrality.
+    
     Parameters
     ---------
-    Hq: (array) q-adjacency matrix.
-    Rerturn:
+    A: (array) q-adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
     '''
-    if isinstance(Hq, np.ndarray) == False:
+    if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    Gq = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
-    if nx.is_empty(Gq) == True:
+    if nx.is_empty(G) == True:
         return 0
+    
+    if q != None:
+        A = fast_q_adjacency_matrix(A, q)
+        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
-    prc = nx.pagerank(Gq, alpha=0.85, personalization=None, max_iter=100, tol=1e-06, nstart=None, weight='weight', dangling=None)
+    prc = nx.pagerank(G, alpha=0.85, personalization=None, max_iter=100, tol=1e-06, nstart=None, weight='weight', dangling=None)
     Max_prc = max(dict_to_array(prc))
     return round(Max_prc, 5)

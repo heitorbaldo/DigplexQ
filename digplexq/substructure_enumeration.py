@@ -1,5 +1,5 @@
 '''
-Substructure enumeration.
+Functions for substructure enumeration.
 '''
 
 import numpy as np
@@ -34,12 +34,13 @@ __all_ = [
 ]
 
 
-#--------------------------------
-
 
 def union_k(X, Y, k):
-    '''Returns the union of the k-simplices between X and Y.
+    '''Returns the union of the k-simplices of X and Y.
     '''
+    if X == [] and Y == []:
+        return []
+    
     Diff = []
     n1 = len(X)
     n2 = len(Y)
@@ -64,6 +65,9 @@ def union_k(X, Y, k):
 def intersection_k(X, Y, k):
     '''Returns the common k-simplices between X and Y.
     '''
+    if X == [] or Y == []:
+        return []
+    
     Inter = []
     n1 = len(X)
     n2 = len(Y)
@@ -84,11 +88,26 @@ def intersection_k(X, Y, k):
         return Inter
 
 
-def enumerate_double_edges(M):
+def enumerate_double_edges(A, q=None):
     '''Returns all double edges.
+    
     Parameters
-    ---------
+    ----------
+    A: (array) Adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
     '''
+    if isinstance(A, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+
+    if nx.is_empty(G) == True:
+        return 0
+    
+    if q != None:
+        A = fast_q_adjacency_matrix(A, q)
+        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    
     W = []
     for i in range(len(M)):
         for j in range(len(M)):
@@ -99,15 +118,26 @@ def enumerate_double_edges(M):
     return W
 
 
-def enumerate_directed_n_cycles(M, n):
+def enumerate_directed_n_cycles(A, n, q=None):
     '''Returns all directed n-cycles.
     Parameters
     ---------
-    M: adjacency matrix.
-    n: lenght.
+    A: adjacency matrix.
+    n: length.
     '''
+    if isinstance(A, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+
+    if nx.is_empty(G) == True:
+        return 0
+    
+    if q != None:
+        A = fast_q_adjacency_matrix(A, q)
+        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    
     DC = []
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
     C = list(nx.simple_cycles(G))
     for i in range(len(C)):
         if len(C[i]) == n:
@@ -118,10 +148,11 @@ def enumerate_directed_n_cycles(M, n):
     
     
 def enumerate_edges_elementary_directed_quase_clique(path):
-    '''Returns all edges in the elementary DQC.
+    '''Returns all edges in the elementary directed quasi-clique.
+    
     Parameters
     ---------
-    path: (array) elementary n-path.
+    path: (array) Elementary n-path.
     '''
     path_edges = []
     for i in range(len(path)-2):
@@ -134,8 +165,11 @@ def enumerate_edges_elementary_directed_quase_clique(path):
 
 def enumerate_invariant_elementary_n_paths(PC, n):
     '''Returns all invariant elementary n-paths.
-    M: (NumPy array) a path complex.
-    n: (integer) 
+    
+    Parameters
+    ----------
+    PC: (array) Path complex.
+    n: (integer) Path length.
     '''
     if n < 1:
         raise ValueError("n must be an integer greater than or equal to 1.")
@@ -190,15 +224,31 @@ def f_count(X, Y, i=1):
     return f
 
 
-def count_weakly_q_connected_components(Hq):
+def count_weakly_q_connected_components(A, q=None):
     '''Returns all weakly q-connected components.
-    Hq: q-adjacency matrix.
+    
+    Parameters
+    ----------
+    A: (array) Adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
+    
+    Notes
+    ----------
+    Based on the Networkx's function "weakly_connected_components()".
     '''
-    if isinstance(Hq, np.ndarray) == False:
-        raise TypeError("Input must be a square matrix.")
+    if isinstance(A, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+
+    if nx.is_empty(G) == True:
+        return 0
+    
+    if q != None:
+        A = fast_q_adjacency_matrix(A, q)
+        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
     
     Struct_Vec = []
-    G = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
     wcc = list(nx.weakly_connected_components(G))
     
     for i in range(len(wcc)):
@@ -207,15 +257,31 @@ def count_weakly_q_connected_components(Hq):
     return Struct_Vec
  
     
-def count_strongly_q_connected_components(Hq):
+def count_strongly_q_connected_components(A, q=None):
     '''Returns all strongly q-connected components.
-    Hq: q-adjacency matrix.
+    
+    Parameters
+    ----------
+    A: (array) Adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
+    
+    Notes
+    ----------
+    Based on the Networkx's function "strongly_connected_components()".
     '''
-    if isinstance(Hq, np.ndarray) == False:
-        raise TypeError("Input must be a square matrix.")
+    if isinstance(A, np.ndarray) == False:
+        raise TypeError("Input must be a NumPy square matrix.")
+
+    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+
+    if nx.is_empty(G) == True:
+        return 0
+    
+    if q != None:
+        A = fast_q_adjacency_matrix(A, q)
+        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
     
     Struct_Vec = []
-    G = nx.from_numpy_matrix(Hq, create_using=nx.DiGraph())
     scc = list(nx.strongly_connected_components(G))
     
     for i in range(len(scc)):
@@ -227,9 +293,10 @@ def count_strongly_q_connected_components(Hq):
 #Amount of n-paths in a path complex:
 def count_n_paths(PC):
     '''Returns the number of n-paths.
+    
     Parameters
     ----------
-    PC: (NumPy array) path complex.
+    PC: (array) Path complex.
     '''
     Qtd = []
     for i in range(len(PC)):
@@ -240,7 +307,10 @@ def count_n_paths(PC):
 #Amount of directed n-cliques in a DFC:
 def count_directed_n_cliques(DFC):
     '''Returns the number of directed n-cliques.
+    
     Parameters
+    ----------
+    DFC (array) Directed flag complex.
     '''
     Qtd = []
     for i in range(len(DFC)):
@@ -250,35 +320,51 @@ def count_directed_n_cliques(DFC):
 
 def count_elmentary_directed_quasi_cliques(PC, n):
     '''Returns the mount of invariant elementary n-paths in a path complex.
-    PC: path complex.
+    
+    Parameters
+    ----------
+    PC (array) Path complex.
     '''
     qtd_n_dqc = len(enumerate_invariant_elementary_n_paths(PC, n))
     return qtd_n_dqc
 
 
 
-def count_edges(M):
-    '''Returns all 
+def count_edges(A):
+    '''Returns the number of edges.
+    Parameters
+    ----------
+    A: (array) Adjacency matrix.
     '''
     n = 0
-    for i in range(len(M)):
-        for j in range(len(M)):
+    for i in range(len(A)):
+        for j in range(len(A)):
             if M[i,j] > 0:
                 n+=1
     return n
 
 
-def count_double_edges(M):
+def count_double_edges(A, q=None):
     '''Returns the number of double-edges.
+    
+    Parameters
+    ----------
+    A: (array) Adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
     '''
-    Qtd = len(enumerate_double_edges(M))
+    Qtd = len(enumerate_double_edges(A, q))
     return Qtd
         
     
-def count_directed_n_cycles(M):
+def count_directed_n_cycles(A, q=None):
     '''Returns the number of directed cycles.
+    
+    Parameters
+    ----------
+    A: (array) Adjacency matrix.
+    q: (integer) Level of clique organization of the graph.
     '''
-    Qtd = len(enumerate_directed_n_cycles(M))
+    Qtd = len(enumerate_directed_n_cycles(A, q))
     return Qtd   
 
 
@@ -301,45 +387,45 @@ def first_flag_topological_structure_vector(DFC):
     return count_dir_cliques
 
 
-def second_flag_topological_structure_vector(Hq):
+def second_flag_topological_structure_vector(A, q=None):
     '''Returns a vector whose entries are the number of weakly connected components of the digraph.
     Parameters
     ----------
-    Hq: q-adjacency matrix.
+    A: (array) Adjacency matrix.
     '''
-    wcc = count_weakly_q_connected_components(Hq)
+    wcc = count_weakly_q_connected_components(A, q)
     return wcc
 
 
-def third_flag_topological_structure_vector(Hq):
+def third_flag_topological_structure_vector(A, q=None):
     '''Returns a vector whose entries are the number of strongly connected components of the digraph.
     Parameters
     ----------
-    Hq: q-adjacency matrix.
+    A: (array) Adjacency matrix.
     '''
-    scc = count_strongly_q_connected_components(Hq)
+    scc = count_strongly_q_connected_components(A, q)
     return scc
 
 
-def fourth_flag_topological_structure_vector(M, k=0):
+def fourth_flag_topological_structure_vector(A, k=0):
     '''Returns the vector whose entries are the Betti numbers associated to the filtration.
     Parameters
     ----------
-    M: adjacency matrix.
+    A: adjacency matrix.
     k: (integer) k-th homology group.
     '''
-    v_k = betti_numbers(M, k=k)
+    v_k = betti_numbers(A, k=k)
     return v_k
 
 
-def fifth_flag_topological_structure_vector(M, k=1):
+def fifth_flag_topological_structure_vector(A, k=1):
     '''Returns the vector whose entries are the length of each barcode (li = di - bi).
     Parameters
     ----------
-    M: adjacency matrix.
+    A: adjacency matrix.
     k: (integer) k-th homology group.
     '''
-    bc_k = barcode_length(M, k=k)
+    bc_k = barcode_length(A, k=k)
     return bc_k
 
 
