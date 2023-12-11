@@ -8,7 +8,7 @@
 DigplexQ is a Python package to perform computations with digraph-based complexes (e.g., directed flag complexes and path complexes)
 
 * Free software: MIT license
-* Documentation:![Documentation_DigplexQ](documentation.pdf)
+* Documentation: ![Documentation](docs/documentation_digplexq.pdf)
 
 Installation
 --------
@@ -42,6 +42,8 @@ fast_q_adjacency_matrix(M, q=1)
 #in-q-degree centrality
 in_q_degree_centrality(M, q=1, results="nodes")
 ```
+
+More examples are available in the ![Jupyter Notebook](https://github.com/heitorbaldo/DigplexQ/blob/main/Tutorial_DigplexQ.ipynb).
 
 Dependencies
 --------
