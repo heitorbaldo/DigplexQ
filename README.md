@@ -1,5 +1,5 @@
 
-![DigplexQ](logo.png)
+<img src="digplexq-logo.png" alt="drawing" width="350"/>
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]()
 [![Documentation Status](https://readthedocs.org/projects/digplexq/badge/?version=latest)]()
