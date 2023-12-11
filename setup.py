@@ -7,7 +7,7 @@ if sys.version_info[:2] < (3, 7):
     error = (
         "DigplexQ 0.0.1+ requires Python 3.7 or later (%d.%d detected). \n"
         #"For Python 2.7, please install version x using: \n"
-        #"$ pip install 'pygebraca==x'" % sys.version_info[:2]
+        #"$ pip install 'digplexq==x'" % sys.version_info[:2]
     )
     sys.stderr.write(error + "\n")
     sys.exit(1)
@@ -19,7 +19,7 @@ with open("digplexq/__init__.py") as fid:
             break
 
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
@@ -46,7 +46,7 @@ keywords=['Directed Flag Complexes', 'Path Complexes', 'Algebraic Topology', 'TD
 platforms = ["Linux", "Mac OSX", "Windows", "Unix"],
 classifiers=classifiers,
 license='MIT License',
-install_requires=['networkx'],
+install_requires=['networkx', 'scipy', 'persim', 'gtda'],
 packages=['digplexq'],
 zip_safe=False
 )
