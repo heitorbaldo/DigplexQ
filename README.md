@@ -2,14 +2,13 @@
 <img src="digplexq-logo.png" alt="drawing" width="350"/>
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]()
-[![Documentation Status](https://readthedocs.org/projects/digplexq/badge/?version=latest)](https://digplexq.readthedocs.io/en/latest/)
 [![PyPI version](https://img.shields.io/pypi/v/digplexq)](https://pypi.org/project/digplexq/)
 
 ------
 DigplexQ is a Python package to perform computations with digraph-based complexes (e.g., directed flag complexes and path complexes)
 
 * Free software: MIT license
-* Documentation: https://digplexq.readthedocs.io.
+* Documentation: [Documentation_DigplexQ]
 
 Installation
 --------
@@ -54,6 +53,4 @@ Dependencies
 * [persim](https://persim.scikit-tda.org/en/latest/)
 * [hodgelaplacians](https://github.com/tsitsvero/hodgelaplacians)
 
-------
-References
---------
+
