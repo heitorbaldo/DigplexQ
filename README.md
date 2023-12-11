@@ -22,7 +22,11 @@ Examples
 --------
 
 ```python
-import digplexq
+from digplexq.directed_q_analysis import *
+from digplexq.digraph_based_complexes import *
+from digplexq.structure_based_simplicial_measures import *
+from digplexq.random_digraphs import *
+from digplexq.utils import *
 
 M = directed_erdos_renyi_GnM_model(20, 40, weight=False)
 M = remove_double_edges(M) #remove double edges.
