@@ -47,8 +47,8 @@ Dependencies
 * [SciPy](https://scipy.org/)
 * [NetworkX](https://github.com/networkx/networkx)
 * [gtda](https://giotto-ai.github.io/gtda-docs/0.5.1/library.html)
-* persim
-* hodgelaplacians
+* [persim](https://persim.scikit-tda.org/en/latest/)
+* [hodgelaplacians](https://github.com/tsitsvero/hodgelaplacians)
 
 ------
 References
