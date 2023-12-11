@@ -5,7 +5,7 @@ from setuptools import setup
 
 if sys.version_info[:2] < (3, 7):
     error = (
-        "DigplexQ 0.0.1+ requires Python 3.7 or later (%d.%d detected). \n"
+        "DigplexQ 0.0.4+ requires Python 3.7 or later (%d.%d detected). \n"
         #"For Python 2.7, please install version x using: \n"
         #"$ pip install 'digplexq==x'" % sys.version_info[:2]
     )
@@ -36,7 +36,7 @@ classifiers = [
 
 setup(
 name='digplexq',
-version='0.0.1',
+version='0.0.4',
 description='DigplexQ is a Python package to perform computations with digraph-based complexes.',
 url='https://github.com/heitorbaldo/digplexq',
 author='Heitor Baldo',
@@ -46,7 +46,7 @@ keywords=['Directed Flag Complexes', 'Path Complexes', 'Algebraic Topology', 'TD
 platforms = ["Linux", "Mac OSX", "Windows", "Unix"],
 classifiers=classifiers,
 license='MIT License',
-install_requires=['networkx', 'scipy', 'persim', 'gtda'],
+install_requires=['numpy', 'networkx', 'scipy', 'persim'],
 packages=['digplexq'],
 zip_safe=False
 )
