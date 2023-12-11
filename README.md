@@ -2,7 +2,7 @@
 <img src="digplexq-logo.png" alt="drawing" width="350"/>
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]()
-[![Documentation Status](https://readthedocs.org/projects/digplexq/badge/?version=latest)]()
+[![Documentation Status](https://readthedocs.org/projects/digplexq/badge/?version=latest)](https://digplexq.readthedocs.io/en/latest/)
 [![PyPI version](https://img.shields.io/pypi/v/digplexq)](https://pypi.org/project/digplexq/)
 
 ------
