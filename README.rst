@@ -18,16 +18,35 @@
 
 DigplexQ is a Python package to perform computations with digraph-based complexes (e.g., directed flag complexes and path complexes)
 
-
 * Free software: MIT license
 * Documentation: https://digplexq.readthedocs.io.
 
 Installation
 --------
-* TODO
 
-Features
+```python
+pip install digplexq
+```
+
+Examples
 --------
 
-* TODO
+```python
+import digplexq
+
+M = directed_erdos_renyi_GnM_model(20, 40, weight=False)
+M = remove_double_edges(M) #remove double edges.
+
+DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+```
+
+Dependencies
+--------
+
+* NumPy
+* SciPy
+* Networkx
+* gtda
+* persim
+* hodgelaplacians
 
