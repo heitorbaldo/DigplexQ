@@ -8,13 +8,13 @@
 DigplexQ is a Python package to perform computations with digraph-based complexes (e.g., directed flag complexes and path complexes)
 
 * Free software: MIT license
-* Documentation: [Documentation_DigplexQ]
+* Documentation:![Documentation_DigplexQ](documentation.pdf)
 
 Installation
 --------
 
 ```bash
-pip install digplexq
+pip3 install digplexq
 ```
 
 Examples
