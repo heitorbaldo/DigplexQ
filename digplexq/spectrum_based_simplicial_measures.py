@@ -69,7 +69,6 @@ def q_energy(A, q=None):
     
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
     Bq = to_binary(A)
     BqtBq = np.matmul(Bq.transpose(), Bq)
