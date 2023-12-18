@@ -192,8 +192,8 @@ def histogram_cosine_kernel(M1, M2):
     if np.all(M1==0) == True or np.all(M2==0) == True:
         return 1.0
     
-    X = DirectedFlagComplex(M1, split='by_dimension_without_nodes')
-    Y = DirectedFlagComplex(M2, split='by_dimension_without_nodes')
+    X = DirectedFlagComplex(M1, split='by_dimension_with_nodes')
+    Y = DirectedFlagComplex(M2, split='by_dimension_with_nodes')
     
     #v1 = f_count(X, Y, i=1)
     #v2 = f_count(X, Y, i=2)
