@@ -108,9 +108,9 @@ def enumerate_double_edges(A, q=None):
         G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
     
     W = []
-    for i in range(len(M)):
-        for j in range(len(M)):
-            if i != j and M[i,j] != 0 and M[j,i] != 0:
+    for i in range(len(A)):
+        for j in range(len(A)):
+            if i != j and A[i,j] != 0 and A[j,i] != 0:
                 W.append([i,j,i])
             else:
                 pass
@@ -352,7 +352,7 @@ def count_double_edges(A, q=None):
     q: (integer) Level of clique organization of the graph.
     '''
     Qtd = len(enumerate_double_edges(A, q))
-    return Qtd
+    return Qtd/2
         
     
 def count_directed_n_cycles(A, q=None):
