@@ -5,7 +5,7 @@ from setuptools import setup
 
 if sys.version_info[:2] < (3, 7):
     error = (
-        "DigplexQ 0.0.4+ requires Python 3.7 or later (%d.%d detected). \n"
+        "DigplexQ 0.0.5+ requires Python 3.7 or later (%d.%d detected). \n"
         #"For Python 2.7, please install version x using: \n"
         #"$ pip install 'digplexq==x'" % sys.version_info[:2]
     )
