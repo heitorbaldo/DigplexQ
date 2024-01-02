@@ -27,19 +27,13 @@ __all__ = [
 #----------------------------
 
 def retrieve_k_cliques(M, k):
-    """Return the k-cliques of the underlying undirected graph.
+    """Returns all k-cliques of the underlying undirected graph.
+    
     Parameters
     ----------
-    M: NumPy matrix
-       Directed adjacency matrix.
-    k: int
-       Max dimension of the cliques.
+    M: (array) Adjacency matrix.
+    k: (integer) Maximum dimension of the cliques.
        
-    Returns
-    -------
-    W: NumPy array
-       Array of cliques.
-    
     Notes
     -----
     Based on the clique enumerator algorithm [1].
@@ -58,26 +52,25 @@ def retrieve_k_cliques(M, k):
 
 
 def intersection(cl1, cl2):
-    """Returns the vertices belonging to the 
+    """Returns all vertices belonging to the 
     intersection of two cliques.
     
     Parameters
     ----------
-    cl1: clique 1
-    cl2: clique 2
+    cl1: (array) Clique 1.
+    cl2: (array) Clique 2.
     """
     intersec = [i for i in cl1 if i in cl2]
     return intersec
 
 
 def k_simplices(DFC, k):
-    '''Returns the k-dimensional simplices.
+    '''Returns all k-dimensional simplices.
     
     Parameters
     ----------
-    DFC: Directed Flag Complex
-    K: integer
-       Dimension of the simplices.
+    DFC: (array) Directed Flag Complex.
+    k: (integer) Dimension of the simplices.
     '''
     kSimp = []
     for simplex in DFC:
@@ -87,12 +80,12 @@ def k_simplices(DFC, k):
 
 
 def ordered_simplex(M, simplex):
-    '''Returns the ordered simplices.
+    '''Returns the ordered simplex.
     
     Parameters
     ----------
     M: (array) Adjacency matrix
-    simplex: NumPy array
+    simplex: (array) Simplex.
     '''
     P=[]
     G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
@@ -160,13 +153,7 @@ def FlagTournaplex(M):
     
     Parameters
     ----------
-    M: NumPy matrix
-       Adjacency matrix of a digraph.
-    
-    Returns
-    -------
-    FT: NumPy array
-        Tournaments Array.
+    M: (array) Adjacency matrix.
     """
     if isinstance(M, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
@@ -186,8 +173,8 @@ def DirectedFlagComplex(M, split='by_dimension_without_nodes'):
     
     Parameters
     ----------
-    M: (array) Adjacency matrix of a digraph.
-    Split: (string) 'by_dimension', 'nodes', 'none'.
+    M: (array) Adjacency matrix.
+    split: (string) 'by_dimension', 'nodes', 'none'.
     """
     if isinstance(M, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
@@ -245,12 +232,12 @@ def DirectedFlagComplex(M, split='by_dimension_without_nodes'):
 #----- Path Complex -----
     
 def PathComplex(M, n):
-    '''Returns the path complex of a digraph from its adjacency matrix.
+    '''Returns the path complex of a digraph.
     
     Parameters
     ----------
-    M: adjacency matrix.
-    n: maximum (n-1)-path length.
+    M: (array) Adjacency matrix.
+    n: (integer) maximum (n-1)-path length.
     '''
     if isinstance(M, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
