@@ -11,7 +11,7 @@ from sklearn.preprocessing import normalize
 from digplexq.utils import *
 from digplexq.simplicial_weights import *
 from digplexq.digraph_based_complexes import *
-#from digplexq.auxiliaxy_functions import *
+
 
 __all__ = [
     "k_faces",
@@ -32,16 +32,16 @@ __all__ = [
 #----- Face maps -----
 
 def k_faces(DFC, simplex, k):
-    '''Returns all the k-faces of a given simplex.
+    '''Returns all k-faces of a given simplex.
     
     Parameters
     ----------
-    DFC: DirectedFlagComplex(M, "by_dimension_with_nodes")
+    DFC: (array) Directed flag complex (DFC = DirectedFlagComplex(M, "by_dimension_with_nodes")).
     simplex: (array) simplex.
     k: (integer) Dimension of the k-faces.
     '''
     if len(simplex)-1 <= k:
-        raise ValueError("k must be less than the dimension of the simplex.")
+        raise ValueError("k must be less than or equal to the dimension of the simplex.")
         
     kFaces = []
     for face in DFC[k]:
@@ -55,7 +55,9 @@ def face_maps(DFC, simplex, k):
     
     Parameters
     -------
-    DFC: DirectedFlagComplex.
+    DFC: (array) Directed flag complex.
+    simplex: (array) Simplex.
+    k: (integer) Dimension of the face.
     '''
     ordered_faces = []
     Faces = k_faces(DFC, simplex, k)
@@ -79,7 +81,8 @@ def q_i_j_connectivity(DFC, simplex1, simplex2):
     
     Parameters
     ----------
-    DFC: DirectedFlagComplex.
+    DFC: (array) Directed flag complex.
+    simplex1, simplex2: (array) Simplices.
     '''
     k1 = len(simplex1)-2
     k2 = len(simplex2)-2
@@ -109,10 +112,12 @@ def q_i_j_connectivity(DFC, simplex1, simplex2):
 
 def is_in_q_near(DFC_nodes, q, simplex1, simplex2):
     '''Returns True if simplex1 is in-q-near to simplex2.
+    
     Parameters
     -------
-    DFC_nodes: (array) DirectedFlagComplex.
-    q: (integer)
+    DFC_nodes: (array) Directed flag complex.
+    q: (integer) Level of the q-connectivity.
+    simplex1, simplex2: (array) Simplices.
     '''
     q_i_j = q_i_j_connectivity(DFC_nodes, simplex1, simplex2)
     
@@ -136,8 +141,9 @@ def is_out_q_near(DFC_nodes, q, simplex1, simplex2):
     
     Parameters
     ----------   
-    DFC_nodes: NumPy array
-    q: (integer)
+    DFC_nodes: (array) Directed flag complex.
+    q: (integer) Level of the q-connectivity.
+    simplex1, simplex2: (array) Simplices.
     '''
     q_i_j = q_i_j_connectivity(DFC_nodes, simplex1, simplex2)
     
@@ -168,10 +174,11 @@ def ComplementElements(list1, list2):
 
 
 def MaximalSimplices(DFC):
-    '''Returns the maximal simplices of a DFC.
+    '''Returns all maximal simplices of a directed flag complex.
+    
     Parameters
     -------
-    DFC = DirectedFlagComplex(M, "by_dimension_without_nodes")
+    DFC: (array) Directed flag complex (DirectedFlagComplex(M, "by_dimension_without_nodes")).
     '''
     if DFC == []:
         return []
@@ -214,7 +221,8 @@ def q_index(MaxSimp, q):
     
     Parameters
     ---------
-    MaxSimp: (NumPy array) maximal simplices.
+    MaxSimp: (array) Maximal simplices.
+    q: (integer) Level of the q-connectivity.
     '''
     index = 0
     
@@ -236,12 +244,13 @@ def q_index(MaxSimp, q):
 
 
 def q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
-    '''Returns the q-adjacency matrix of a DFC.
+    '''Returns the (lower) q-adjacency matrix of a directed flag complex.
     
     Parameters
     -------
-    DFC = directed flag complex.
-    q: order of connection.
+    DFC_dim_none: (array) Directed flag complex (without nodes).
+    DFC_dim_nodes: (array) Directed flag complex (with nodes).
+    q: (integer) Level of the q-connectivity.
     '''
     MS = MaximalSimplices(DFC_dim_none)
     MaxSimp = connect_array(MS)
@@ -276,9 +285,13 @@ def q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
     
        
 def weighted_q_adjacency_matrix(M, DFC_dim_none, DFC_dim_nodes, q):
-    '''Returns the weighted q-adjacency matrix of a DFC.
-    DFC = directed flag complex.
-    q: order of connection.
+    '''Returns the (lower) weighted q-adjacency matrix of a directed flag complex.
+    
+    Parameters
+    -------
+    DFC_dim_none: (array) Directed flag complex (without nodes).
+    DFC_dim_nodes: (array) Directed flag complex (with nodes).
+    q: (integer) Level of the q-connectivity.
     '''
     MS = MaximalSimplices(DFC_dim_none)
     MaxSimp = connect_array(MS)
@@ -335,6 +348,11 @@ def adjacency_matrices_wcc(A):
 
 def fast_q_adjacency_matrix(M, q):
     '''Returns the q-adjacency matrix.
+    
+    Parameters
+    ----------
+    M: (array) Adjacency matrix.
+    q: (integer) Level of the q-connectivity.
     '''
     DFC_dim_nodes = DirectedFlagComplex(M, "by_dimension_with_nodes")
     DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")

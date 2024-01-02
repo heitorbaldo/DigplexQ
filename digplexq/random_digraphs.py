@@ -22,6 +22,7 @@ __all__ = [
     "directed_barabasi_albert_model",
     "maslov_sneppen_rewiring",
     "lattice_rewiring",
+    "random_rewiring",
     "random_3_clique_model",
     "random_3_clique_model",
     "include_exclude_edges",
@@ -253,7 +254,8 @@ def directed_barabasi_albert_model(n, alpha, beta, gamma, delta_in, delta_out, w
 #----- Maslov-Sneppen Rewiring and Lattice Rewiring -----
     
 def maslov_sneppen_rewiring(M):
-    '''Returns the adjacency matrix of a randomly rewired digraph.
+    '''Returns the adjacency matrix of a randomly rewired digraph 
+    (preserving the degree distribution).
     
     Parameters
     ----------
@@ -270,7 +272,8 @@ def maslov_sneppen_rewiring(M):
 
 
 def lattice_rewiring(M):
-    '''Returns the adjacency matrix of a randomly rewired digraph.
+    '''Returns the adjacency matrix of a randomly rewired digraph
+    (preserving the degree distribution).
     
     Parameters
     ----------
@@ -285,6 +288,20 @@ def lattice_rewiring(M):
     LW_matrix = nx.to_numpy_matrix(LW)
     return LW_matrix
 
+
+def random_rewiring(M):
+    '''Returns the adjacency matrix of a randomly rewired digraph.
+    
+    Parameters
+    ----------
+    M: (array) Adjacency matrix.
+    '''
+    n = len(M)
+    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+    G_wde = remove_double_edges_rand(G)
+    N = G_wde.number_of_edges()
+    R = directed_erdos_renyi_GnM_model(n, N, weight=False) 
+    return R
 
 
 #------------ Random k-Clique Digraph Model -------------

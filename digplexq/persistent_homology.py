@@ -1,6 +1,6 @@
 '''
 Persistent Homology for Directed Flag Complexes.
-The codes in this file are based on the following packages: Persim, Giotto-TDA, Gudhi.
+The codes in this file are based on the following packages: Persim, Giotto-TDA.
 '''
 
 import math
@@ -8,9 +8,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.spatial.distance import pdist, squareform
 
-import gudhi as gd
 import persim as pers
-from pyflagser import *
 from gtda.homology import FlagserPersistence
 from gtda.diagrams import PersistenceEntropy, PersistenceImage, BettiCurve, PairwiseDistance
 
