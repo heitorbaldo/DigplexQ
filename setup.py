@@ -36,7 +36,7 @@ classifiers = [
 
 setup(
 name='digplexq',
-version='0.0.4',
+version='0.0.5',
 description='DigplexQ is a Python package to perform computations with digraph-based complexes.',
 url='https://github.com/heitorbaldo/digplexq',
 author='Heitor Baldo',
