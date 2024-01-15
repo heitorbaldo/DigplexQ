@@ -25,12 +25,12 @@ __all__ = [
 ]
 
 
-def hodge_q_laplacian(MaxSimp, q):
+def hodge_q_laplacian(DFC, q):
     '''Returns the Hodge q-Laplacian.
     
     Parameters
     ---------
-    MaxSimp: (array) maximal simplices.
+    DFC: (array) directed flag complex
     q: (integer) Level of clique organization of the graph.
     
     Notes
@@ -38,14 +38,14 @@ def hodge_q_laplacian(MaxSimp, q):
     Based on the package "hodgelaplacians" (https://github.com/tsitsvero/hodgelaplacians).
     '''
 
-    n = len(MaxSimp)
-    maxdim = len(MaxSimp[n-1][0])
+    n = len(DFC)
+    maxdim = len(DFC[n-1][0])
 
-    if q >= maxdim-1:
+    if q > maxdim-1:
         return np.array([[0]])
     else:
-        MaxSimp_conn = connect_array(MaxSimp)
-        hl = HodgeLaplacians(MaxSimp_conn)
+        DFC_conn = connect_array(DFC)
+        hl = HodgeLaplacians(DFC_conn)
         Lq = hl.getHodgeLaplacian(q)
         Lq_arr = Lq.toarray()
         return Lq_arr
