@@ -8,4 +8,4 @@ See https://github.com/heitorbaldo/DigplexQ for complete documentation.
 """
 
 #Current version:
-__version__ = "0.0.5"
+__version__ = "0.0.6"

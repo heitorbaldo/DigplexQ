@@ -26,6 +26,10 @@ __all__ = [
     "weighted_q_adjacency_matrix",
     "adjacency_matrices_wcc",
     "fast_q_adjacency_matrix",
+    "MaximalSimplices_WIN",
+    "lower_q_index",
+    "lower_q_adjacency_matrix",
+    "fast_lower_q_adjacency_matrix",
 ]
 
 
@@ -188,6 +192,7 @@ def MaximalSimplices(DFC):
     Maximal = []
     Maximal_None = []
     Len = []
+        
     for i in range(0, len(DFC)-1):
         for j in range(len(DFC[i])):
             for k in range(len(DFC[i+1])):
@@ -199,7 +204,7 @@ def MaximalSimplices(DFC):
         Len.append(len(face))
     
     if Len != []:
-        for k in range(2, max(Len)+1):
+        for k in range(1, max(Len)+1):
             Split_Faces.append(k_simplices(Faces, k))
     else:
         Split_Faces = Faces
@@ -224,27 +229,36 @@ def q_index(MaxSimp, q):
     MaxSimp: (array) Maximal simplices.
     q: (integer) Level of the q-connectivity.
     '''
-    index = 0
-    
     d = len(MaxSimp)
     dim_simp = len(MaxSimp[0][0])
     max_dim_simp = len(MaxSimp[d-1][0])
     diff = max_dim_simp - q
     
     if q+d < dim_simp:
-        index = 0  
+        index = 0
     
-    if(dim_simp <= q+d and diff > 1):
-        m = q+2-dim_simp
-        for p in range(1,m+1):
-            index += len(MaxSimp[p-1])  
+    sum_total = 0
+    for i in range(d):
+        sum_total += len(MaxSimp[i])
+    
+    if(diff >= 0 and q >= dim_simp and dim_simp == 1):
+        sum_partial = 0
+        for j in range(q, d):
+            sum_partial += len(MaxSimp[j])
+        index = sum_total - sum_partial 
+        
+    elif(diff >= 0 and q >= dim_simp and dim_simp > 1):
+        sum_partial = 0
+        for j in range(q-dim_simp+1, d):
+            sum_partial += len(MaxSimp[j])
+        index = sum_total - sum_partial
     else:
-        index = 0    
+        index = 0
     return index
 
 
-def q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
-    '''Returns the (lower) q-adjacency matrix of a directed flag complex.
+def q_adjacency_matrix(DFC_dim_nodes, q):
+    '''Returns the q-adjacency matrix of a directed flag complex.
     
     Parameters
     -------
@@ -252,7 +266,7 @@ def q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
     DFC_dim_nodes: (array) Directed flag complex (with nodes).
     q: (integer) Level of the q-connectivity.
     '''
-    MS = MaximalSimplices(DFC_dim_none)
+    MS = MaximalSimplices(DFC_dim_nodes)
     MaxSimp = connect_array(MS)
     Len = len(MaxSimp)
     
@@ -275,17 +289,19 @@ def q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
             else:
                 H[i, j] = 0
     
-    if len(DFC_dim_none) <= q:
-        Hq = np.array([[0]])
     
+    d = len(MS)
+    max_dim_simp = len(MS[d-1][0])
+    if max_dim_simp < q+1:
+        Hq = np.array([[0]])
     else:
         Hq = H[q_index(MS, q):, q_index(MS, q):]  
     return Hq
     
     
        
-def weighted_q_adjacency_matrix(M, DFC_dim_none, DFC_dim_nodes, q):
-    '''Returns the (lower) weighted q-adjacency matrix of a directed flag complex.
+def weighted_q_adjacency_matrix(M, DFC_dim_nodes, q):
+    '''Returns the weighted q-adjacency matrix of a directed flag complex.
     
     Parameters
     -------
@@ -293,7 +309,7 @@ def weighted_q_adjacency_matrix(M, DFC_dim_none, DFC_dim_nodes, q):
     DFC_dim_nodes: (array) Directed flag complex (with nodes).
     q: (integer) Level of the q-connectivity.
     '''
-    MS = MaximalSimplices(DFC_dim_none)
+    MS = MaximalSimplices(DFC_dim_nodes)
     MaxSimp = connect_array(MS)
     Len = len(MaxSimp)
     
@@ -316,7 +332,9 @@ def weighted_q_adjacency_matrix(M, DFC_dim_none, DFC_dim_nodes, q):
             else:
                 H[i, j] = 0
     
-    if len(DFC_dim_none) <= q:
+    d = len(MS)
+    max_dim_simp = len(MS[d-1][0])
+    if max_dim_simp < q+1:
         Hq = np.array([[0]])
     else:
         Hq = H[q_index(MS, q):, q_index(MS, q):]
@@ -355,10 +373,130 @@ def fast_q_adjacency_matrix(M, q):
     q: (integer) Level of the q-connectivity.
     '''
     DFC_dim_nodes = DirectedFlagComplex(M, "by_dimension_with_nodes")
-    DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
-    Hq = q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q)
+    Hq = q_adjacency_matrix(DFC_dim_nodes, q)
     return Hq
 
 
 
+#----- Lower Directed q-Graph -----  
 
+def MaximalSimplices_WIN(DFC):
+    '''Returns all maximal simplices (without isolated nodes) of a directed flag complex.
+    
+    Parameters
+    -------
+    DFC: (array) Directed flag complex (DirectedFlagComplex(M, "by_dimension_without_nodes")).
+    '''
+    if DFC == []:
+        return []
+    
+    Faces = []
+    Split_Faces = []
+    Maximal = []
+    Maximal_None = []
+    Len = []
+    for i in range(0, len(DFC)-1):
+        for j in range(len(DFC[i])):
+            for k in range(len(DFC[i+1])):
+                if(set(DFC[i][j]).issubset(set(DFC[i+1][k])) == True):
+                    Faces.append(DFC[i][j])
+                    break
+    
+    for face in Faces:
+        Len.append(len(face))
+    
+    if Len != []:
+        for k in range(2, max(Len)+1):
+            Split_Faces.append(k_simplices(Faces, k))
+    else:
+        Split_Faces = Faces
+   
+    for l in range(len(Split_Faces)):
+        Complements = ComplementElements(DFC[l], Split_Faces[l])
+        if Complements != []:
+            Maximal.append(Complements)
+    
+    Maximal.append(DFC[len(Split_Faces)])
+    return Maximal
+
+    
+def lower_q_index(MaxSimp, q):
+    '''Returns the index associated to q.
+    
+    Parameters
+    ---------
+    MaxSimp: (array) Maximal simplices.
+    q: (integer) Level of the q-connectivity.
+    '''
+    index = 0
+    
+    d = len(MaxSimp)
+    dim_simp = len(MaxSimp[0][0])
+    max_dim_simp = len(MaxSimp[d-1][0])
+    diff = max_dim_simp - q
+    
+    if q+d < dim_simp:
+        index = 0  
+    
+    if(dim_simp <= q+d and diff > 1):
+        m = q+2-dim_simp
+        for p in range(1,m+1):
+            index += len(MaxSimp[p-1])  
+    else:
+        index = 0    
+    return index
+
+
+def lower_q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q):
+    '''Returns the (lower) q-adjacency matrix of a directed flag complex.
+    
+    Parameters
+    -------
+    DFC_dim_none: (array) Directed flag complex (without nodes).
+    DFC_dim_nodes: (array) Directed flag complex (with nodes).
+    q: (integer) Level of the q-connectivity.
+    '''
+    MS = MaximalSimplices_WIN(DFC_dim_none)
+    MaxSimp = connect_array(MS)
+    Len = len(MaxSimp)
+    
+    if MS == []:
+        return np.array([[0]])
+    
+    H = np.zeros((Len, Len))
+    for i in range(len(MaxSimp)):
+        for j in range(len(MaxSimp)):
+            Q = []
+            q_i_j = q_i_j_connectivity(DFC_dim_nodes, MaxSimp[i], MaxSimp[j])
+            if i != j and q_i_j != []:
+                for conn in q_i_j:
+                    Q.append(conn[0])
+                Qmax = max(Q)
+                if Qmax >= q and is_out_q_near(DFC_dim_nodes, Qmax, MaxSimp[i], MaxSimp[j]) == True:
+                    H[i, j] = 1
+                else:
+                    H[i, j] = 0
+            else:
+                H[i, j] = 0
+    
+    if len(DFC_dim_none) <= q:
+        Hq = np.array([[0]])
+    
+    else:
+        Hq = H[lower_q_index(MS, q):, lower_q_index(MS, q):]  
+    return Hq
+
+
+
+def fast_lower_q_adjacency_matrix(M, q):
+    '''Returns the lower q-adjacency matrix.
+    
+    Parameters
+    ----------
+    M: (array) Adjacency matrix.
+    q: (integer) Level of the q-connectivity.
+    '''
+    DFC_dim_nodes = DirectedFlagComplex(M, "by_dimension_with_nodes")
+    DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+    Hq = lower_q_adjacency_matrix(DFC_dim_none, DFC_dim_nodes, q)
+    return Hq

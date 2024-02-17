@@ -209,7 +209,7 @@ def weighted_directed_watts_strogatz_model(n, k, p):
 #----- Barabási-Albert Random Model -----
 
 def directed_barabasi_albert_model(n, alpha, beta, gamma, delta_in, delta_out, weight=False):
-    """Returns a weighted Barabási-Albert digraph (see [1]).
+    """Returns a scale-free directed graph (see [1]).
     
     Parameters (see [2]):
     ----------
