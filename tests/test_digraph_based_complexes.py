@@ -222,12 +222,12 @@ class TestDirectedFlagComplex(TestCase):
         self.assertEqual(DirectedFlagComplex(Zero, "by_dimension_with_nodes"), DFC_dim_nodes_Zero)
 
     def test_MaximalSimplices(self):
-        self.assertEqual(MaximalSimplices(DFC_dim_none_A), MaxSimp_A)
-        self.assertEqual(MaximalSimplices(DFC_dim_none_Zero), MaxSimp_Zero)
-        self.assertEqual(MaximalSimplices(DFC_dim_none_B), MaxSimp_B)
-        self.assertEqual(MaximalSimplices(DFC_dim_none_C), MaxSimp_C)
-        self.assertEqual(MaximalSimplices(DFC_dim_none_D1), MaxSimp_D1)
-        self.assertEqual(MaximalSimplices(DFC_dim_none_D2), MaxSimp_D2)
+        self.assertEqual(MaximalSimplices(DFC_dim_nodes_A), MaxSimp_A)
+        self.assertEqual(MaximalSimplices(DFC_dim_nodes_Zero), MaxSimp_Zero)
+        self.assertEqual(MaximalSimplices(DFC_dim_nodes_B), MaxSimp_B)
+        self.assertEqual(MaximalSimplices(DFC_dim_nodes_C), MaxSimp_C)
+        self.assertEqual(MaximalSimplices(DFC_dim_nodes_D1), MaxSimp_D1)
+        self.assertEqual(MaximalSimplices(DFC_dim_nodes_D2), MaxSimp_D2)
 
 
 class TestPathComplex(TestCase):
