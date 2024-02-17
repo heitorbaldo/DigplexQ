@@ -31,10 +31,10 @@ M = directed_erdos_renyi_GnM_model(20, 40, weight=False)
 M = remove_double_edges(M) #remove double edges.
 
 #Directed flag complex:
-DFC_dim_none = DirectedFlagComplex(M, "by_dimension_without_nodes")
+DFC = DirectedFlagComplex(M, "by_dimension_with_nodes")
 
 #Maximal directed simplices:
-maxsimp = MaximalSimplices(DFC_dim_none)
+maxsimp = MaximalSimplices(DFC)
 
 #q-Adjacency matrix:
 fast_q_adjacency_matrix(M, q=1)
