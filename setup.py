@@ -5,7 +5,7 @@ from setuptools import setup
 
 if sys.version_info[:2] < (3, 7):
     error = (
-        "DigplexQ 0.0.5+ requires Python 3.7 or later (%d.%d detected). \n"
+        "DigplexQ 0.0.6+ requires Python 3.7 or later (%d.%d detected). \n"
         #"For Python 2.7, please install version x using: \n"
         #"$ pip install 'digplexq==x'" % sys.version_info[:2]
     )
@@ -36,7 +36,7 @@ classifiers = [
 
 setup(
 name='digplexq',
-version='0.0.5',
+version='0.0.6',
 description='DigplexQ is a Python package to perform computations with digraph-based complexes.',
 url='https://github.com/heitorbaldo/digplexq',
 author='Heitor Baldo',
