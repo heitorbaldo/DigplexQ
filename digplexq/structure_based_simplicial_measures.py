@@ -210,21 +210,9 @@ def q_density(A, q=None):
         A = fast_q_adjacency_matrix(A, q)
         G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
 
-    #If G is weakly connected:
-    if nx.is_weakly_connected(G) == True:
-        s_den = nx.density(G)
-        return s_den
+    s_den = nx.density(G)
+    return s_den
 
-    #If G is not weakly connected:
-    else:
-        SDen = []
-        wcc = adjacency_matrices_wcc(A)
-        for c in wcc:
-            S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-            s_den = nx.density(S)
-            SDen.append(s_den)
-        Max_den = max(SDen)
-        return round(Max_den, 4)
 
 
 def in_q_degree(A, q=None, i=None):
@@ -256,27 +244,12 @@ def in_q_degree(A, q=None, i=None):
     if i != None:
         indeg = G.in_degree(i)
         return indeg  
-
-    #If G is weakly connected:
-    if nx.is_weakly_connected(G) == True:
-        inDg = []
-        for i in range(len(A)):
-            inDg.append(G.in_degree(i))
-        Max_in_dc = max(inDg)
-        return Max_in_dc
-
-    #If G is not weakly connected:
-    else:
-        iDC = []
-        inDg = []
-        wcc = adjacency_matrices_wcc(A)
-        for c in wcc:
-            S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-            for i in range(len(S)):
-                inDg.append(S.in_degree(i))
-            iDC.append(max(inDg))
-        Max_in_dc = max(iDC)
-        return round(Max_in_dc, 4)
+    
+    inDg = []
+    for i in range(len(A)):
+        inDg.append(G.in_degree(i))
+    Max_in_dc = max(inDg)
+    return Max_in_dc
 
 
 def out_q_degree(A, i=None, q=None):
@@ -309,26 +282,11 @@ def out_q_degree(A, i=None, q=None):
         outdeg = G.out_degree(i)
         return outdeg  
 
-    #If G is weakly connected:
-    if nx.is_weakly_connected(G) == True:
-        outDg = []
-        for i in range(len(A)):
-            outDg.append(G.out_degree(i))
-        Max_out_dc = max(outDg)
-        return Max_out_dc
-
-    #If G is not weakly connected:
-    else:
-        oDC = []
-        outDg = []
-        wcc = adjacency_matrices_wcc(A)
-        for c in wcc:
-            S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-            for i in range(len(S)):
-                outDg.append(G.out_degree(i))
-            oDC.append(max(outDg))
-        Max_out_dc = max(oDC)
-        return round(Max_out_dc, 4)
+    outDg = []
+    for i in range(len(A)):
+        outDg.append(G.out_degree(i))
+    Max_out_dc = max(outDg)
+    return Max_out_dc
 
 
     
@@ -365,22 +323,9 @@ def in_q_degree_centrality(A, q=None, results="nodes"):
         return in_dc
     
     if results == "max":
-        #If G is weakly connected:
-        if nx.is_weakly_connected(G) == True:
-            in_dc = nx.in_degree_centrality(G)
-            Max_in_dc = max(dict_to_array(in_dc))
-            return Max_in_dc
-
-        #If G is not weakly connected:
-        else:
-            iDC = []
-            wcc = adjacency_matrices_wcc(A)
-            for c in wcc:
-                S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-                in_dc = nx.in_degree_centrality(S)
-                iDC.append(max(dict_to_array(in_dc)))
-            Max_in_dc = max(iDC)
-            return round(Max_in_dc, 4)
+        in_dc = nx.in_degree_centrality(G)
+        Max_in_dc = max(dict_to_array(in_dc))
+        return Max_in_dc
 
 
 def out_q_degree_centrality(A, q=None, results="nodes"):
@@ -414,22 +359,9 @@ def out_q_degree_centrality(A, q=None, results="nodes"):
         return out_dc
     
     if results == "max":
-        #If G is weakly connected:
-        if nx.is_weakly_connected(G) == True:
-            out_dc = nx.out_degree_centrality(G)
-            Max_out_dc = max(dict_to_array(out_dc))
-            return Max_out_dc
-
-        #If G is not weakly connected:
-        else:
-            oDC = []
-            wcc = adjacency_matrices_wcc(A)
-            for c in wcc:
-                S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
-                out_dc = nx.out_degree_centrality(S)
-                oDC.append(max(dict_to_array(out_dc)))
-            Max_out_dc = max(oDC)
-            return round(Max_out_dc, 4)
+        out_dc = nx.out_degree_centrality(G)
+        Max_out_dc = max(dict_to_array(out_dc))
+        return Max_out_dc
 
 
 def q_closeness_centrality(A, q=None, results="nodes", wf_improved=False):
@@ -531,7 +463,7 @@ def q_harmonic_centrality(A, q=None, results="nodes"):
 
 
 
-def q_betweenness_centrality(A, q=None, results="nodes", normalized=True):
+def q_betweenness_centrality(A, q=None, results="nodes", normalized=False):
     '''Returns the q-betweenness centrality of the nodes of a digraph.
     
     Parameters
@@ -580,7 +512,7 @@ def q_betweenness_centrality(A, q=None, results="nodes", normalized=True):
             return round(Max_dsbc, 4)
 
 
-def q_katz_centrality(A, q=None, results="nodes", alpha=0.1, beta=1.0, normalized=True):
+def q_katz_centrality(A, q=None, results="nodes", alpha=0.1, beta=1.0, normalized=False):
     '''Returns the q-Katz centrality of the nodes of a digraph.
     
     Parameters
@@ -622,7 +554,7 @@ def q_katz_centrality(A, q=None, results="nodes", alpha=0.1, beta=1.0, normalize
         return round(Max_katz, 4)
 
 
-def global_q_reaching_centrality(A, q=None, normalized=False):
+def global_q_reaching_centrality(A, q=None, normalized=True):
     '''Returns the q-reaching centrality of a digraph.
     
     Parameters
