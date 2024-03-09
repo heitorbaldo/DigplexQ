@@ -5,7 +5,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/digplexq)](https://pypi.org/project/digplexq/)
 
 ------
-DigplexQ is a Python package to perform computations with digraph-based complexes (directed flag complexes and path complexes).
+DigplexQ is a Python package to perform computations with digraph-based complexes (directed flag complexes and path complexes). It is an "adjacency matrix-centered" package since it is possible to perform all computations just by entering an adjacency matrix as input.
 
 * Free software: MIT license
 * Documentation: TODO
