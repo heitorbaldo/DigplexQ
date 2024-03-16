@@ -16,6 +16,7 @@ __all_ = [
     "enumerate_directed_n_cycles",
     "enumerate_edges_elementary_directed_quase_clique",
     "enumerate_invariant_elementary_n_paths",
+    "remove_double_edges_preserving_cliques",
     "f_count",
     "count_weakly_q_connected_components",
     "count_n_paths",
@@ -190,6 +191,24 @@ def enumerate_invariant_elementary_n_paths(PC, n):
     return Elem_Inv_Paths
 
 
+def remove_double_edges_preserving_cliques(M, DFC):
+    double_edges = enumerate_double_edges(M)
+    for edge in double_edges:
+        for clique in DFC[1]:
+            if edge[0] == clique[0] and edge[1] == clique[1]:
+                M[edge[0], edge[1]] = 1
+                M[edge[1], edge[0]] = 0
+            elif edge[0] == clique[0] and edge[1] == clique[2]:
+                M[edge[0], edge[1]] = 1
+                M[edge[1], edge[0]] = 0
+            elif edge[0] == clique[1] and edge[1] == clique[2]:
+                M[edge[0], edge[1]] = 1
+                M[edge[1], edge[0]] = 0
+            else:
+                M[edge[0], edge[1]] = 0
+                M[edge[1], edge[0]] = 1
+    
+    return M
 
 #------------------------------
 

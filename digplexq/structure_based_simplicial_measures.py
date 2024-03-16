@@ -292,7 +292,7 @@ def out_q_degree(A, i=None, q=None):
     
 #----- Measures of Centrality -----
     
-def in_q_degree_centrality(A, q=None, results="max"):
+def in_q_degree_centrality(A, q=None, results="nodes"):
     '''Returns the in-q-degree centrality of a digraph.
     
     Parameters
@@ -328,7 +328,7 @@ def in_q_degree_centrality(A, q=None, results="max"):
         return Max_in_dc
 
 
-def out_q_degree_centrality(A, q=None, results="max"):
+def out_q_degree_centrality(A, q=None, results="nodes"):
     '''Returns the out-q-degree centrality of a digraph.
     
     Parameters
@@ -413,7 +413,7 @@ def q_closeness_centrality(A, q=None, results="nodes", wf_improved=False):
             return round(Max_dscc, 4)
 
 
-def q_harmonic_centrality(A, q=None, results="max"):
+def q_harmonic_centrality(A, q=None, results="nodes"):
     '''Returns the q-harmonic centrality of a digraph.
     
     Parameters
@@ -463,7 +463,7 @@ def q_harmonic_centrality(A, q=None, results="max"):
 
 
 
-def q_betweenness_centrality(A, q=None, results="max", normalized=False):
+def q_betweenness_centrality(A, q=None, results="nodes", normalized=False):
     '''Returns the q-betweenness centrality of the nodes of a digraph.
     
     Parameters
@@ -512,7 +512,7 @@ def q_betweenness_centrality(A, q=None, results="max", normalized=False):
             return round(Max_dsbc, 4)
 
 
-def q_katz_centrality(A, q=None, results="max", alpha=0.1, beta=1.0, normalized=False):
+def q_katz_centrality(A, q=None, results="nodes", alpha=0.1, beta=1.0, normalized=False):
     '''Returns the q-Katz centrality of the nodes of a digraph.
     
     Parameters

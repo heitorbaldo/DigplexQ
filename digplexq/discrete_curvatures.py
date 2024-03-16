@@ -106,7 +106,7 @@ def outgoing_edges_vertex(DFC, v):
     return out_edges
    
 
-def q_forman_ricci_curvature(M, DFC, edge_curv, weight_func='max_in_out'):
+def q_forman_ricci_curvature(M, DFC, edge_curv, node_weight='max_in_out', edge_weight='in_edge'):
     '''Returns the Forman-Ricci curvature of a weighted directed edge.
     
     Parameters
@@ -125,8 +125,8 @@ def q_forman_ricci_curvature(M, DFC, edge_curv, weight_func='max_in_out'):
     S1_k = 0
     S2_k = 0
     
-    w_edge = simplex_weight(M, edge_curv, weight_func)
-    w_nodes = node_weights_simplex(M, edge_curv, weight_func)
+    w_edge = simplex_weight(M, edge_curv, edge_weight)
+    w_nodes = node_weights_simplex(M, edge_curv, node_weight)
     
     IE = incoming_edges(DFC, edge_curv)
     OE = outgoing_edges(DFC, edge_curv)
@@ -135,16 +135,16 @@ def q_forman_ricci_curvature(M, DFC, edge_curv, weight_func='max_in_out'):
         S0_k += w_nodes[k]/w_edge
         
     for edge in IE:
-        S1_k += w_nodes[0] / math.sqrt(w_edge*simplex_weight(M, edge, weight_func))
+        S1_k += w_nodes[0] / math.sqrt(w_edge*simplex_weight(M, edge, edge_weight))
         
     for edge in OE:
-        S2_k += w_nodes[1] / math.sqrt(w_edge*simplex_weight(M, edge, weight_func))
+        S2_k += w_nodes[1] / math.sqrt(w_edge*simplex_weight(M, edge, edge_weight))
     
     FRC = w_edge*(S0_k - S1_k - S2_k)
     return round(FRC, 5)
    
 
-def in_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'):
+def in_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'):
     '''Returns the in-q-Forman-Ricci curvature of a vertex.
     
     Parameters
@@ -157,12 +157,12 @@ def in_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'):
     IE = incoming_edges_vertex(DFC, v)
     
     for edge in IE:    
-        inFRC += q_forman_ricci_curvature(M, DFC, edge, weight_func=weight_func)
+        inFRC += q_forman_ricci_curvature(M, DFC, edge, node_weight=node_weight, edge_weight=edge_weight)
     
     return round(inFRC, 5)
 
 
-def out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'):
+def out_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'):
     '''Returns the in-q-Forman-Ricci curvature of a vertex.
     
     Parameters
@@ -175,22 +175,25 @@ def out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'):
     IO = outgoing_edges_vertex(DFC, v)
     
     for edge in IO:
-        outFRC += q_forman_ricci_curvature(M, DFC, edge, weight_func=weight_func)
+        outFRC += q_forman_ricci_curvature(M, DFC, edge, node_weight=node_weight, edge_weight=edge_weight)
     
     return round(outFRC, 5)
 
 
-def in_q_forman_ricci_curvature_max(M):
+def in_q_forman_ricci_curvature_max(M, threshold=False):
     '''Returns the maximum of the in-q-Forman-Ricci curvature among all vertices.
     
     Parameters
     ----------
     M: (array) Adjacency matrix.
+    threshold: (boolean) if True, it returns a predefined value depending on the 
+    number of arcs in the digraph.
     '''
     G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
     
-    if G.number_of_edges() > 240:
-        return -520
+    if threshold == True:
+        if G.number_of_edges() > 450:
+            return -700
     
     DFC = DirectedFlagComplex(M, "by_dimension_without_nodes")
     
@@ -201,23 +204,26 @@ def in_q_forman_ricci_curvature_max(M):
     inFRC = []
     
     for v in range(n):
-        inFRC.append(in_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'))
+        inFRC.append(in_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'))
      
-    Max_inFRC = max(inFRC)
+    Max_inFRC = min(inFRC)
     return Max_inFRC
 
 
-def out_q_forman_ricci_curvature_max(M):
+def out_q_forman_ricci_curvature_max(M, threshold=False):
     '''Returns the maximum of the out-q-Forman-Ricci curvature among all vertices.
     
     Parameters
     ----------
     M: (array) Adjacency matrix.
+    threshold: (boolean) if True, it returns a predefined value depending on the 
+    number of arcs in the digraph.
     '''
     G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
     
-    if G.number_of_edges() > 240:
-        return -520
+    if threshold == True:
+        if G.number_of_edges() > 450:
+            return -700
     
     DFC = DirectedFlagComplex(M, "by_dimension_without_nodes")
     
@@ -228,7 +234,7 @@ def out_q_forman_ricci_curvature_max(M):
     outFRC = []
     
     for v in range(n):
-        outFRC.append(out_q_forman_ricci_curvature(M, DFC, v, weight_func='max_in_out'))
+        outFRC.append(out_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'))
      
-    Max_outFRC = max(outFRC)
+    Max_outFRC = min(outFRC)
     return Max_outFRC

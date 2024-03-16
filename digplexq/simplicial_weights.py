@@ -110,11 +110,15 @@ def simplex_weight(M, simplex, weight_func='max_in_out'):
     for i in range(len(simplex)):
         w_max *= node_weights_max(M)[simplex[i]]
         w_in_out *= node_weights_max_in_out(M)[simplex[i]]
+       
+    w_in_edge = node_weights_max_in_out(M)[simplex[0]]
         
     if weight_func == 'max':
         return round(w_max, 2)
     if weight_func == 'max_in_out':
         return round(w_in_out, 2)
+    if weight_func == 'in_edge':
+        return round(w_in_edge, 2)
 
 
           
