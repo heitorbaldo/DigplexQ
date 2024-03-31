@@ -1,6 +1,7 @@
 
 <img src="digplexq-logo.png" alt="drawing" width="350"/>
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]()
 [![PyPI version](https://img.shields.io/pypi/v/digplexq)](https://pypi.org/project/digplexq/)
 
