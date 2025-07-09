@@ -11,7 +11,7 @@ DigplexQ is a Python package to perform computations with digraph-based complexe
 This package implements several quantitative methods for the analysis of digraph-based complexes, mainly based on concepts from directed Q-Analysis.
 
 * Free software: MIT license
-* Documentation: TODO
+* Documentation: ![Documentation](https://github.com/heitorbaldo/DigplexQ/blob/main/documentation_digplexq.pdf)
 
 Installation
 --------
