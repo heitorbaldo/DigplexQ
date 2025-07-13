@@ -17,7 +17,7 @@ __all__ = [
     "q_energy",
     "q_spectral_density",
     "q_spectral_entropy",
-    "q_vonNeuman_entropy",
+    "q_vonNeumann_entropy",
     "q_KL_divergence",
     "q_spectral_distance",
     "q_eigenvector_centrality",
@@ -27,12 +27,12 @@ __all__ = [
 
 def hodge_q_laplacian(DFC, q):
     '''Returns the Hodge q-Laplacian.
-    
+
     Parameters
     ---------
     DFC: (array) directed flag complex
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     -----
     Based on the package "hodgelaplacians" (https://github.com/tsitsvero/hodgelaplacians).
@@ -53,7 +53,7 @@ def hodge_q_laplacian(DFC, q):
 
 def q_energy(A, q=None):
     '''Returns the q-energy of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -66,7 +66,7 @@ def q_energy(A, q=None):
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
 
@@ -81,7 +81,7 @@ def q_energy(A, q=None):
 
 def q_spectral_density(L, b=1):
     '''Returns the q-spectral density of a digraph.
-    
+
     Parameters
     ----------
     L: (array) Hodge q-Laplacian.
@@ -97,7 +97,7 @@ def q_spectral_density(L, b=1):
 
 def q_spectral_entropy(L):
     '''Returns the q-spectral entropy of a digraph.
-    
+
     Parameters
     ---------
     L: (array) Hodge q-Laplacian.
@@ -122,7 +122,7 @@ def q_spectral_entropy(L):
 
 def q_vonNeumann_entropy(L, b=1):
     '''Returns the q-von-Neuman entropy of a digraph.
-    
+
     Parameters
     ---------
     L: (array) Hodge q-Laplacian.
@@ -137,9 +137,9 @@ def q_vonNeumann_entropy(L, b=1):
 
 
 def q_KL_divergence(L1, L2, b=1):
-    '''Returns the q-Kullback-Liebler divergence betweenn two 
+    '''Returns the q-Kullback-Liebler divergence betweenn two
     Hodge q-Laplacians.
-    
+
     Parameters
     ---------
     L1: (array) Hodge q-Laplacian.
@@ -153,7 +153,7 @@ def q_KL_divergence(L1, L2, b=1):
 
 def q_spectral_distance(L1, L2):
     '''Returns the q-spectral distance between two Hodge q-Laplacians.
-    
+
     Parameters
     ---------
     L1: Hodge q-Laplacian.
@@ -184,7 +184,7 @@ def q_spectral_distance(L1, L2):
 
 def q_eigenvector_centrality(A, q=None):
     '''Returns the q-eigenvector centrality of a digraph.
-    
+
     Parameters
     ---------
     A: (array) q-adjacency matrix.
@@ -197,7 +197,7 @@ def q_eigenvector_centrality(A, q=None):
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
         G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
@@ -209,7 +209,7 @@ def q_eigenvector_centrality(A, q=None):
 
 def q_pagerank_centrality(A, q=None):
     '''Returns the q-pagerank centrality.
-    
+
     Parameters
     ---------
     A: (array) q-adjacency matrix.
@@ -222,7 +222,7 @@ def q_pagerank_centrality(A, q=None):
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
         G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
