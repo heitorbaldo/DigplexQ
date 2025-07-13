@@ -120,7 +120,7 @@ def q_spectral_entropy(L):
     return round(Hq, 5)
 
 
-def q_vonNeuman_entropy(L, b=1):
+def q_vonNeumann_entropy(L, b=1):
     '''Returns the q-von-Neuman entropy of a digraph.
     
     Parameters
