@@ -84,7 +84,7 @@ def directed_erdos_renyi_Gnp_model(n, p, weight=False):
     Parameters:
     ----------
     n : (integer) Number of nodes. 
-    p : (float) Probability of add a directed edge (i,j).
+    p : (float) Probability of adding a directed edge (i,j).
     weight: (boolean) If True, it randomly assigns weights to edges.
     """
     A = np.zeros((n,n))  #null matrix (no connections).           
