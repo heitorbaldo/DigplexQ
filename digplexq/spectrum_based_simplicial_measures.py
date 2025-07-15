@@ -62,7 +62,7 @@ def q_energy(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
@@ -193,14 +193,14 @@ def q_eigenvector_centrality(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
 
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     ec = nx.eigenvector_centrality_numpy(G, weight=None, max_iter=100, tol=0)
     Max_ec = max(dict_to_array(ec))
@@ -218,14 +218,14 @@ def q_pagerank_centrality(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
 
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     prc = nx.pagerank(G, alpha=0.85, personalization=None, max_iter=100, tol=1e-06, nstart=None, weight='weight', dangling=None)
     Max_prc = max(dict_to_array(prc))

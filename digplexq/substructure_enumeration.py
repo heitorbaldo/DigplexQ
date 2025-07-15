@@ -99,14 +99,14 @@ def enumerate_double_edges(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
     
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
     
     W = []
     for i in range(len(A)):
@@ -128,14 +128,14 @@ def enumerate_directed_n_cycles(A, n, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
     
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
     
     DC = []
     C = list(nx.simple_cycles(G))
@@ -257,14 +257,14 @@ def count_weakly_q_connected_components(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
     
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
     
     Struct_Vec = []
     wcc = list(nx.weakly_connected_components(G))
@@ -290,14 +290,14 @@ def count_strongly_q_connected_components(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
     
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
     
     Struct_Vec = []
     scc = list(nx.strongly_connected_components(G))
@@ -337,7 +337,7 @@ def count_directed_n_cliques(DFC):
 
 
 def count_elmentary_directed_quasi_cliques(PC, n):
-    '''Returns the mount of invariant elementary n-paths in a path complex.
+    '''Returns the number of invariant elementary n-paths in a path complex.
     
     Parameters
     ----------
@@ -391,7 +391,7 @@ def count_directed_n_cycles(A, q=None):
 
 
 def first_flag_topological_structure_vector(DFC):
-    '''Returns a vector which entries are the quantities of k-dimensional directed cliques.
+    '''Returns a vector whose entries are the quantities of k-dimensional directed cliques.
     Parameters
     ----------
     DFC: (array) directed flag complex.
@@ -421,7 +421,7 @@ def third_flag_topological_structure_vector(A, q=None):
 
 
 def fourth_flag_topological_structure_vector(A, k=0):
-    '''Returns the vector whose entries are the Betti numbers associated to the filtration.
+    '''Returns the vector whose entries are the Betti numbers associated with the filtration.
     Parameters
     ----------
     A: adjacency matrix.

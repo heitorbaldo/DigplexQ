@@ -27,17 +27,17 @@ __all__ = [
 
 def incoming_edges(DFC, edge_curv):
     '''Returns the set of incoming edges.
-    
+
     Parameters
     ----------
     DFC: (array) Directed flag complex.
     '''
     if DFC == []:
         return []
-    
+
     if edge_curv not in DFC[0]:
         return []
-    
+
     in_edges = []
     for edge in DFC[0]:
         if edge[1] == edge_curv[0]:
@@ -49,17 +49,17 @@ def incoming_edges(DFC, edge_curv):
 
 def outgoing_edges(DFC, edge_curv):
     '''Returns the set of outgoing edges.
-    
+
     Parameters
     ----------
     DFC: (array) Directed flag complex.
     '''
     if DFC == []:
         return []
-    
+
     if edge_curv not in DFC[0]:
         return []
-    
+
     out_edges = []
     for edge in DFC[0]:
         if edge[0] == edge_curv[1]:
@@ -70,14 +70,14 @@ def outgoing_edges(DFC, edge_curv):
 
 def incoming_edges_vertex(DFC, v):
     '''Returns the set of incoming edges.
-    
+
     Parameters
     ----------
     DFC: (array) Directed flag complex.
     '''
     if DFC == []:
         return []
-    
+
     in_edges = []
     for edge in DFC[0]:
         if edge[1] == v:
@@ -89,14 +89,14 @@ def incoming_edges_vertex(DFC, v):
 
 def outgoing_edges_vertex(DFC, v):
     '''Returns the set of outgoing edges.
-    
+
     Parameters
     ----------
     DFC: (array) Directed flag complex.
     '''
     if DFC == []:
         return []
-    
+
     out_edges = []
     for edge in DFC[0]:
         if edge[0] == v:
@@ -104,11 +104,11 @@ def outgoing_edges_vertex(DFC, v):
         else:
             pass
     return out_edges
-   
+
 
 def q_forman_ricci_curvature(M, DFC, edge_curv, node_weight='max_in_out', edge_weight='in_edge'):
     '''Returns the Forman-Ricci curvature of a weighted directed edge.
-    
+
     Parameters
     ----------
     M: (array) Adjacency matrix.
@@ -117,36 +117,36 @@ def q_forman_ricci_curvature(M, DFC, edge_curv, node_weight='max_in_out', edge_w
     '''
     if DFC == []:
         return 0
-    
+
     if edge_curv not in DFC[0]:
         return 0
-    
+
     S0_k = 0
     S1_k = 0
     S2_k = 0
-    
+
     w_edge = simplex_weight(M, edge_curv, edge_weight)
     w_nodes = node_weights_simplex(M, edge_curv, node_weight)
-    
+
     IE = incoming_edges(DFC, edge_curv)
     OE = outgoing_edges(DFC, edge_curv)
 
     for k in range(2):
         S0_k += w_nodes[k]/w_edge
-        
+
     for edge in IE:
         S1_k += w_nodes[0] / math.sqrt(w_edge*simplex_weight(M, edge, edge_weight))
-        
+
     for edge in OE:
         S2_k += w_nodes[1] / math.sqrt(w_edge*simplex_weight(M, edge, edge_weight))
-    
+
     FRC = w_edge*(S0_k - S1_k - S2_k)
     return round(FRC, 5)
-   
+
 
 def in_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'):
     '''Returns the in-q-Forman-Ricci curvature of a vertex.
-    
+
     Parameters
     ----------
     M: (array) Adjacency matrix.
@@ -155,16 +155,16 @@ def in_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight
     '''
     inFRC = 0
     IE = incoming_edges_vertex(DFC, v)
-    
-    for edge in IE:    
+
+    for edge in IE:
         inFRC += q_forman_ricci_curvature(M, DFC, edge, node_weight=node_weight, edge_weight=edge_weight)
-    
+
     return round(inFRC, 5)
 
 
 def out_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'):
     '''Returns the in-q-Forman-Ricci curvature of a vertex.
-    
+
     Parameters
     ----------
     M: (array) Adjacency matrix.
@@ -173,68 +173,68 @@ def out_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weigh
     '''
     outFRC = 0
     IO = outgoing_edges_vertex(DFC, v)
-    
+
     for edge in IO:
         outFRC += q_forman_ricci_curvature(M, DFC, edge, node_weight=node_weight, edge_weight=edge_weight)
-    
+
     return round(outFRC, 5)
 
 
 def in_q_forman_ricci_curvature_max(M, threshold=False):
     '''Returns the maximum of the in-q-Forman-Ricci curvature among all vertices.
-    
+
     Parameters
     ----------
     M: (array) Adjacency matrix.
-    threshold: (boolean) if True, it returns a predefined value depending on the 
+    threshold: (boolean) if True, it returns a predefined value depending on the
     number of arcs in the digraph.
     '''
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
-    
+    G = nx.from_numpy_array(M, create_using=nx.DiGraph())
+
     if threshold == True:
         if G.number_of_edges() > 450:
             return -700
-    
+
     DFC = DirectedFlagComplex(M, "by_dimension_without_nodes")
-    
+
     if DFC == []:
         return 0
-    
+
     n = len(M)
     inFRC = []
-    
+
     for v in range(n):
         inFRC.append(in_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'))
-     
+
     Max_inFRC = min(inFRC)
     return Max_inFRC
 
 
 def out_q_forman_ricci_curvature_max(M, threshold=False):
     '''Returns the maximum of the out-q-Forman-Ricci curvature among all vertices.
-    
+
     Parameters
     ----------
     M: (array) Adjacency matrix.
-    threshold: (boolean) if True, it returns a predefined value depending on the 
+    threshold: (boolean) if True, it returns a predefined value depending on the
     number of arcs in the digraph.
     '''
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
-    
+    G = nx.from_numpy_array(M, create_using=nx.DiGraph())
+
     if threshold == True:
         if G.number_of_edges() > 450:
             return -700
-    
+
     DFC = DirectedFlagComplex(M, "by_dimension_without_nodes")
-    
+
     if DFC == []:
         return 0
-    
+
     n = len(M)
     outFRC = []
-    
+
     for v in range(n):
         outFRC.append(out_q_forman_ricci_curvature(M, DFC, v, node_weight='max_in_out', edge_weight='in_edge'))
-     
+
     Max_outFRC = min(outFRC)
     return Max_outFRC

@@ -46,12 +46,12 @@ __all__ = [
 
 def average_shortest_q_walk_length(A, q=None):
     '''Returns the average shortest q-walk length of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "average_shortest_path_length()".
@@ -59,14 +59,14 @@ def average_shortest_q_walk_length(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     #If G is weakly connected:
     if nx.is_weakly_connected(G) == True:
@@ -78,7 +78,7 @@ def average_shortest_q_walk_length(A, q=None):
         AV = []
         wcc = adjacency_matrices_wcc(A)
         for c in wcc:
-            S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
+            S = nx.from_numpy_array(c, create_using=nx.DiGraph())
             AV.append(nx.average_shortest_path_length(S, weight=None))
         Max_av = max(AV)
         return round(Max_av, 4)
@@ -86,12 +86,12 @@ def average_shortest_q_walk_length(A, q=None):
 
 def q_eccentricity(A, q=None):
     '''Returns the q-eccentricity of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "eccentricity()".
@@ -99,14 +99,14 @@ def q_eccentricity(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     #If G is strongly connected:
     if nx.is_strongly_connected(G) == True:
@@ -120,12 +120,12 @@ def q_eccentricity(A, q=None):
 
 def q_diameter(A, q=None):
     '''Returns the q-diameter of a q-digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "diameter()".
@@ -133,14 +133,14 @@ def q_diameter(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     #If G is strongly connected:
     if nx.is_strongly_connected(G) == True:
@@ -154,12 +154,12 @@ def q_diameter(A, q=None):
 
 def q_radius(A, q=None):
     '''Returns the q-radius of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "radius()".
@@ -167,14 +167,14 @@ def q_radius(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     #If G is strongly connected:
     if nx.is_strongly_connected(G) == True:
@@ -188,12 +188,12 @@ def q_radius(A, q=None):
 
 def q_density(A, q=None):
     '''Returns the q-density of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "density()".
@@ -201,14 +201,14 @@ def q_density(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     s_den = nx.density(G)
     return s_den
@@ -217,14 +217,14 @@ def q_density(A, q=None):
 
 def in_q_degree(A, i=None, q=None):
     '''Returns the in-q-degree of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
     i: (integer) Node's label. If None, it returns the maximum
     in-degree of the digraph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "in_degree()".
@@ -232,19 +232,19 @@ def in_q_degree(A, i=None, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     if i != None:
         indeg = G.in_degree(i)
-        return indeg  
-    
+        return indeg
+
     inDg = []
     for i in range(len(A)):
         inDg.append(G.in_degree(i))
@@ -254,7 +254,7 @@ def in_q_degree(A, i=None, q=None):
 
 def out_q_degree(A, i=None, q=None):
     '''Returns the out-q-degree of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -269,18 +269,18 @@ def out_q_degree(A, i=None, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     if i != None:
         outdeg = G.out_degree(i)
-        return outdeg  
+        return outdeg
 
     outDg = []
     for i in range(len(A)):
@@ -289,19 +289,19 @@ def out_q_degree(A, i=None, q=None):
     return Max_out_dc
 
 
-    
+
 #----- Measures of Centrality -----
-    
+
 def in_q_degree_centrality(A, q=None, results="max"):
     '''Returns the in-q-degree centrality of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
     results: (string) If "max", it returns the maximum
     in-degree centrality of the digraph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "in_degree_centrality()".
@@ -309,19 +309,19 @@ def in_q_degree_centrality(A, q=None, results="max"):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if results == "nodes":
         in_dc = nx.in_degree_centrality(G)
         return in_dc
-    
+
     if results == "max":
         in_dc = nx.in_degree_centrality(G)
         Max_in_dc = max(dict_to_array(in_dc))
@@ -330,14 +330,14 @@ def in_q_degree_centrality(A, q=None, results="max"):
 
 def out_q_degree_centrality(A, q=None, results="max"):
     '''Returns the out-q-degree centrality of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
     results: (string) If "max", it returns the maximum
     out-degree centrality of the digraph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "out_degree_centrality()".
@@ -345,19 +345,19 @@ def out_q_degree_centrality(A, q=None, results="max"):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if results == "nodes":
         out_dc = nx.out_degree_centrality(G)
         return out_dc
-    
+
     if results == "max":
         out_dc = nx.out_degree_centrality(G)
         Max_out_dc = max(dict_to_array(out_dc))
@@ -366,14 +366,14 @@ def out_q_degree_centrality(A, q=None, results="max"):
 
 def q_closeness_centrality(A, q=None, results="max", wf_improved=False):
     '''Returns the q-closeness centrality of the nodes of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
     results: (string) If "max", it returns the maximum
     closeness centrality of the digraph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "closeness_centrality()".
@@ -381,19 +381,19 @@ def q_closeness_centrality(A, q=None, results="max", wf_improved=False):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     if results == "nodes":
         dscc = nx.closeness_centrality(G, wf_improved=wf_improved)
         return dscc
-    
+
     if results == "max":
         #If G is weakly connected:
         if nx.is_weakly_connected(G) == True:
@@ -406,7 +406,7 @@ def q_closeness_centrality(A, q=None, results="max", wf_improved=False):
             CC = []
             wcc = adjacency_matrices_wcc(A)
             for c in wcc:
-                S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
+                S = nx.from_numpy_array(c, create_using=nx.DiGraph())
                 dscc = nx.closeness_centrality(S, wf_improved=wf_improved)
                 CC.append(max(dict_to_array(dscc)))
             Max_dscc = max(CC)
@@ -415,14 +415,14 @@ def q_closeness_centrality(A, q=None, results="max", wf_improved=False):
 
 def q_harmonic_centrality(A, q=None, results="max"):
     '''Returns the q-harmonic centrality of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
     results: (string) If "max", it returns the maximum
     harmonic centrality of the digraph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "harmonic_centrality()".
@@ -430,19 +430,19 @@ def q_harmonic_centrality(A, q=None, results="max"):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     if results == "nodes":
         shc = nx.harmonic_centrality(G)
         return shc
-    
+
     if results == "max":
         #If G is weakly connected:
         if nx.is_weakly_connected(G) == True:
@@ -455,7 +455,7 @@ def q_harmonic_centrality(A, q=None, results="max"):
             HC = []
             wcc = adjacency_matrices_wcc(A)
             for c in wcc:
-                S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
+                S = nx.from_numpy_array(c, create_using=nx.DiGraph())
                 shc = nx.harmonic_centrality(S)
                 HC.append(max(dict_to_array(shc)))
             Max_shc = max(HC)
@@ -465,14 +465,14 @@ def q_harmonic_centrality(A, q=None, results="max"):
 
 def q_betweenness_centrality(A, q=None, results="max", normalized=False):
     '''Returns the q-betweenness centrality of the nodes of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
     results: (string) If "max", it returns the maximum
     betweenness centrality of the digraph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "betweenness_centrality()".
@@ -480,19 +480,19 @@ def q_betweenness_centrality(A, q=None, results="max", normalized=False):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if results == "nodes":
         dsbc = nx.betweenness_centrality(G, normalized=normalized, weight=None)
         return dsbc
-    
+
     if results == "max":
         #If G is weakly connected:
         if nx.is_weakly_connected(G) == True:
@@ -505,7 +505,7 @@ def q_betweenness_centrality(A, q=None, results="max", normalized=False):
             BCC = []
             wcc = adjacency_matrices_wcc(A)
             for c in wcc:
-                S = nx.from_numpy_matrix(c, create_using=nx.DiGraph())
+                S = nx.from_numpy_array(c, create_using=nx.DiGraph())
                 dsbc = nx.betweenness_centrality(S, normalized=normalized, weight=None)
                 BCC.append(max(dict_to_array(dsbc)))
             Max_dsbc = max(BCC)
@@ -514,14 +514,14 @@ def q_betweenness_centrality(A, q=None, results="max", normalized=False):
 
 def q_katz_centrality(A, q=None, results="max", alpha=0.1, beta=1.0, normalized=False):
     '''Returns the q-Katz centrality of the nodes of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
     results: (string) If "max", it returns the maximum
     Katz centrality of the digraph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "katz_centrality_numpy()".
@@ -529,15 +529,15 @@ def q_katz_centrality(A, q=None, results="max", alpha=0.1, beta=1.0, normalized=
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     a1 = 1/max(np.linalg.eigvals(A))
     if a1 < 0.1:
         alpha = np.real(a1)/3
@@ -547,7 +547,7 @@ def q_katz_centrality(A, q=None, results="max", alpha=0.1, beta=1.0, normalized=
     if results == "nodes":
         katz = nx.katz_centrality_numpy(G, alpha=alpha, beta=beta, normalized=normalized, weight=None)
         return katz
-    
+
     if results == "max":
         katz = nx.katz_centrality_numpy(G, alpha=alpha, beta=beta, normalized=normalized, weight=None)
         Max_katz = max(dict_to_array(katz))
@@ -556,12 +556,12 @@ def q_katz_centrality(A, q=None, results="max", alpha=0.1, beta=1.0, normalized=
 
 def global_q_reaching_centrality(A, q=None, normalized=True):
     '''Returns the q-reaching centrality of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "global_reaching_centrality()".
@@ -569,14 +569,14 @@ def global_q_reaching_centrality(A, q=None, normalized=True):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     gsrc = nx.global_reaching_centrality(G, normalized=normalized)
     return round(gsrc, 5)
@@ -588,7 +588,7 @@ def global_q_reaching_centrality(A, q=None, normalized=True):
 
 def q_efficiency(A, i, q=None):
     '''Returns the q-efficiency of a digraph's node.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -598,18 +598,18 @@ def q_efficiency(A, i, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     n = len(A)
     nE_i = 0
-    
+
     for j in range(n):
         if j != i:
             try:
@@ -622,14 +622,14 @@ def q_efficiency(A, i, q=None):
                 pass
         else:
             pass
-            
+
     E_i = nE_i/(n-1)
     return round(E_i, 5)
 
 
 def global_q_efficiency(A, q=None):
     '''Returns the global q-efficiency of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -638,20 +638,20 @@ def global_q_efficiency(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     n = len(A)
     nGE = 0
     for i in range(n):
         nGE += q_efficiency(A, i)
-    
+
     GE = nGE/n
     return round(GE, 5)
 
@@ -666,7 +666,7 @@ def average_q_clustering_coefficient(A, q=None):
     ----------
     A: (array) Adjacency matrix.
     q: (integer) Level of clique organization of the graph.
-    
+
     Notes
     ----------
     Based on the Networkx's function "average_clustering()".
@@ -674,15 +674,15 @@ def average_q_clustering_coefficient(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     ACC = nx.average_clustering(G, nodes=None, weight=None, count_zeros=True)
     return round(ACC, 4)
 
@@ -690,7 +690,7 @@ def average_q_clustering_coefficient(A, q=None):
 
 def in_q_degree_rich_club_coefficient(A, k=6, q=None):
     '''Returns the in-q-degree rich-club coefficient phi(k) = E^{in}_k/N^{in}_k(N^{in}_k-1).
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -700,19 +700,19 @@ def in_q_degree_rich_club_coefficient(A, k=6, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     N_k = 0
     n = len(A)
     nodes = []
-    
+
     for i in range(n):
         indeg = G.in_degree(i)
         if indeg > k:
@@ -720,8 +720,8 @@ def in_q_degree_rich_club_coefficient(A, k=6, q=None):
             nodes.append(i)
         else:
             pass
-    
-    if N_k > 1: 
+
+    if N_k > 1:
         H = G.subgraph(nodes)
         E_K = G.number_of_edges()
         RCC = E_K/(N_k*(N_k - 1))
@@ -729,7 +729,7 @@ def in_q_degree_rich_club_coefficient(A, k=6, q=None):
     else:
         return 0
 
-    
+
 def out_q_degree_rich_club_coefficient(A, k=6, q=None):
     '''Returns the out-q-degree rich-club coefficient phi(k) = E^{out}_k/N^{out}_k(N^{out}_k-1).
 
@@ -742,19 +742,19 @@ def out_q_degree_rich_club_coefficient(A, k=6, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     N_k = 0
     n = len(A)
     nodes = []
-    
+
     for i in range(n):
         outdeg = G.out_degree(i)
         if outdeg > k:
@@ -762,8 +762,8 @@ def out_q_degree_rich_club_coefficient(A, k=6, q=None):
             nodes.append(i)
         else:
             pass
-    
-    if N_k > 1: 
+
+    if N_k > 1:
         H = G.subgraph(nodes)
         E_K = G.number_of_edges()
         RCC = E_K/(N_k*(N_k - 1))
@@ -777,7 +777,7 @@ def out_q_degree_rich_club_coefficient(A, k=6, q=None):
 
 def q_communicability(A, i, j, q=None):
     '''Returns the q-communicability of the nodes i and j.
-    
+
     Parameters
     ----------
     A: Adjacency matrix.
@@ -787,15 +787,15 @@ def q_communicability(A, i, j, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     G = expm(A)
     G_ij = G[i,j]
     return round(G_ij, 5)
@@ -803,7 +803,7 @@ def q_communicability(A, i, j, q=None):
 
 def q_communicability_max(A, q=None):
     '''Returns the maximum q-communicability among all the nodes i and j.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -812,21 +812,21 @@ def q_communicability_max(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     V = []
     for i in range(len(A)):
         for j in range(len(A)):
             Gij = q_communicability(A, i, j, q)
             V.append(Gij)
-    
+
     Max_Gij = max(V)
     return round(Max_Gij, 5)
 
@@ -845,14 +845,14 @@ def q_returnability(A, q=None, normalized=True):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     Exp = expm(A)
     K = np.trace(Exp) - len(A)
@@ -860,23 +860,23 @@ def q_returnability(A, q=None, normalized=True):
     if normalized == True:
         A_wde = remove_double_edges(A)
         G = nx.Graph(A_wde)
-        U = nx.to_numpy_matrix(G)
-        
+        U = nx.to_numpy_array(G)
+
         Exp_und = Exp = expm(U)
-        
+
         K_und = np.trace(Exp_und) - len(U)
         Kn = K/K_und
         return round(Kn, 5)
     else:
         return round(K, 5)
 
-    
+
 
 #----- Entropies -----
 
 def q_structural_entropy(A, q=None):
     '''Returns the q-structural entropy of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -885,42 +885,42 @@ def q_structural_entropy(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     n = len(A)
     sum_Q = 0
     H = 0
     sum_Qi = []
-    
+
     for i in range(n):
         Q_i = 0
         for j in range(n):
             Q_i += q_communicability(A, i, j, q)
         sum_Qi.append(Q_i)
-    
+
     for i in range(n):
         for j in range(n):
             sum_Q += q_communicability(A, i, j, q)
-    
+
     if sum_Q == 0:
         return 0
-    
+
     for k in range(n):
         H += (sum_Qi[k]/sum_Q)*math.log2(sum_Qi[k]/sum_Q)
-    
+
     return round(-H, 5)
 
 
 def in_q_degree_distribution_entropy(A, q=None):
     '''Returns the in-q-degree distribution entropy of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -929,19 +929,19 @@ def in_q_degree_distribution_entropy(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     D = []
     H = 0
     n = len(A)
-    
+
     for k in range(n):
         delta_k = 0
         for i in range(n):
@@ -953,16 +953,16 @@ def in_q_degree_distribution_entropy(A, q=None):
             D.append(delta_k)
         else:
             pass
-    
+
     for k in range(len(D)):
         H += (D[k]/n)*math.log2(D[k]/n)
-    
+
     return round(-H, 5)
 
 
 def out_q_degree_distribution_entropy(A, q=None):
     '''Returns the out-q-degree distribution entropy of a digraph.
-    
+
     Parameters
     ----------
     A: (array) Adjacency matrix.
@@ -971,19 +971,19 @@ def out_q_degree_distribution_entropy(A, q=None):
     if isinstance(A, np.ndarray) == False:
         raise TypeError("Input must be a NumPy square matrix.")
 
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 
     if nx.is_empty(G) == True:
         return 0
-    
+
     if q != None:
         A = fast_q_adjacency_matrix(A, q)
-        G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
-    
+        G = nx.from_numpy_array(A, create_using=nx.DiGraph())
+
     D = []
     H = 0
     n = len(A)
-    
+
     for k in range(n):
         delta_k = 0
         for i in range(n):
@@ -995,8 +995,8 @@ def out_q_degree_distribution_entropy(A, q=None):
             D.append(delta_k)
         else:
             pass
-    
+
     for k in range(len(D)):
         H += (D[k]/n)*math.log2(D[k]/n)
-    
+
     return round(-H, 5)

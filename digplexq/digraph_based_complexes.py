@@ -88,7 +88,7 @@ def ordered_simplex(M, simplex):
     simplex: (array) Simplex.
     '''
     P=[]
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(M, create_using=nx.DiGraph())
     H = G.subgraph(simplex)
     for i in simplex:
         for j in simplex:
@@ -107,7 +107,7 @@ def ordered_simplex(M, simplex):
 
 def retrieve_n_paths(M, s, t, n):
     W = []
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(M, create_using=nx.DiGraph())
     P = list(nx.all_simple_paths(G, source=s, target=t, cutoff=n))
     for i in range(len(P)):
         if len(P[i]) == n:
@@ -119,7 +119,7 @@ def retrieve_n_paths(M, s, t, n):
 
 def n_paths(M, n):
     P = []
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(M, create_using=nx.DiGraph())
     for i in range(len(M)):
         for j in range(len(M)):
             P.append(retrieve_n_paths(M, i, j, n))
@@ -188,11 +188,11 @@ def DirectedFlagComplex(M, split='by_dimension_without_nodes'):
     Ordered_DFC = []
     With_Nodes = []
     Final_DFC = []
-    G = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(M, create_using=nx.DiGraph())
     H = G.to_undirected()
     Cliques = list(nx.enumerate_all_cliques(H))
     for clique in Cliques:
-        D = nx.from_numpy_matrix(M, create_using=nx.DiGraph())
+        D = nx.from_numpy_array(M, create_using=nx.DiGraph())
         S = G.subgraph(clique)
         if nx.is_directed_acyclic_graph(S) == True:
                 DFC.append(clique)

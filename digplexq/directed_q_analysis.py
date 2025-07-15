@@ -365,7 +365,7 @@ def adjacency_matrices_wcc(A):
         raise TypeError("Input must be a square matrix.")
 
     WCC = []
-    G = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+    G = nx.from_numpy_array(A, create_using=nx.DiGraph())
     wcc = list(nx.weakly_connected_components(G))
     for c in wcc:
         S = G.subgraph(c)
