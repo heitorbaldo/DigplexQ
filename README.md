@@ -51,7 +51,7 @@ More examples are available in the [Jupyter Notebook](https://github.com/heitorb
 
 Issues
 --------
-For versions before v0.0.8, you may encounter the following error:
+For versions prior to v0.0.8, you may encounter the following error:
 
 ```
 AttributeError: module 'networkx' has no attribute 'from_numpy_matrix'
