@@ -48,6 +48,18 @@ in_q_degree_centrality(M, q=1, results="nodes")
 
 More examples are available in the [Jupyter Notebook](https://github.com/heitorbaldo/DigplexQ/blob/main/Tutorial_DigplexQ.ipynb).
 
+
+Issues
+--------
+For versions before v0.0.8, you may encounter the following error:
+
+```
+AttributeError: module 'networkx' has no attribute 'from_numpy_matrix'
+```
+
+To solve this issue, downgrade networkx or use ```nx.from_numpy_array()``` instead of ```nx.from_numpy_matrix()```.
+
+
 Dependencies
 --------
 
