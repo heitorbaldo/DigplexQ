@@ -51,13 +51,16 @@ More examples are available in the [Jupyter Notebook](https://github.com/heitorb
 
 Issues
 --------
-For versions prior to v0.0.8, you may encounter the following error:
+For versions prior to v0.0.8, you may encounter the following errors:
 
 ```
 AttributeError: module 'networkx' has no attribute 'from_numpy_matrix'
 ```
+```
+AttributeError: module 'networkx' has no attribute 'to_numpy_matrix'
+```
 
-To solve this issue, downgrade networkx or use ```nx.from_numpy_array()``` instead of ```nx.from_numpy_matrix()```.
+To solve these issues, downgrade networkx or use ```nx.from_numpy_array()``` instead of ```nx.from_numpy_matrix()```, and ```nx.to_numpy_array()``` instead of ```nx.to_numpy_matrix()```.
 
 
 Dependencies
