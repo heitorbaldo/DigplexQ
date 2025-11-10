@@ -62,6 +62,9 @@ AttributeError: module 'networkx' has no attribute 'to_numpy_matrix'
 
 To solve these issues, downgrade networkx or use ```nx.from_numpy_array()``` instead of ```nx.from_numpy_matrix()```, and ```nx.to_numpy_array()``` instead of ```nx.to_numpy_matrix()```.
 
+Warnings
+--------
+This package only handles digraphs without double edges, so it is recommended to use the ```remove_double_edges()``` function before performing the calculations.
 
 Dependencies
 --------
