@@ -64,7 +64,7 @@ To solve these issues, downgrade networkx or use ```nx.from_numpy_array()``` ins
 
 Warnings
 --------
-This package only handles digraphs without double edges, so it is recommended to use the ```remove_double_edges()``` function before performing the calculations.
+This package only handles digraphs without double edges, so it is recommended to use the ```remove_double_edges()``` function before performing computations.
 
 Dependencies
 --------
