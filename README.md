@@ -8,7 +8,7 @@
 ------
 DigplexQ is a Python package to perform computations with digraph-based complexes (directed flag complexes and path complexes). It is an "adjacency matrix-centered" package since it was designed so that the user can perform all computations just by entering an adjacency matrix as input.
 
-This package implements several quantitative methods for the analysis of digraph-based complexes, mainly based on concepts from directed Q-Analysis.
+This package implements several quantitative methods for the analysis of digraph-based complexes, mainly based on concepts from directed Q-Analysis. Only lower q-adjacencies were implemented so far.
 
 * Free software: MIT license
 * Documentation: [Documentation](https://github.com/heitorbaldo/DigplexQ/blob/main/documentation_digplexq.pdf)
@@ -39,7 +39,7 @@ DFC = DirectedFlagComplex(M, "by_dimension_with_nodes")
 #Maximal directed simplices:
 maxsimp = MaximalSimplices(DFC)
 
-#q-Adjacency matrix:
+#Lower q-Adjacency matrix:
 fast_q_adjacency_matrix(M, q=1)
 
 #in-q-degree centrality
