@@ -6,9 +6,9 @@
 [![PyPI version](https://img.shields.io/pypi/v/digplexq)](https://pypi.org/project/digplexq/)
 
 ------
-DigplexQ is a Python package to perform computations with digraph-based complexes (directed flag complexes and path complexes). It is an "adjacency matrix-centered" package since it was designed so that the user can perform all computations just by entering an adjacency matrix as input.
+DigplexQ is a Python package for performing computations on digraph-based complexes, including directed flag complexes and path complexes. It is designed as an adjacency-matrix-centered package, allowing users to perform all computations directly from an adjacency matrix without requiring explicit construction of the underlying complex. 
 
-This package implements several quantitative methods for the analysis of digraph-based complexes, mainly based on concepts from directed Q-Analysis. Only lower q-adjacencies were implemented so far.
+The package implements a range of quantitative methods for analyzing digraph-based complexes, primarily based on concepts from directed Q-analysis. At present, the implementation focuses exclusively on lower q-adjacency.
 
 * Free software: MIT license
 * Documentation: [Documentation](https://github.com/heitorbaldo/DigplexQ/blob/main/documentation_digplexq.pdf)
